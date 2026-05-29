@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<!-- saved from url=(0131)file:///C:/Users/user/Downloads/%EC%96%B8%EB%A1%A0%EC%9C%A0%EB%8B%9B_%ED%99%8D%EB%B3%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_1.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>언론유닛 홍보 실적 대시보드 2021–2026</title>
+<script src="./언론유닛 홍보 실적 대시보드 2021–2026_files/chart.umd.js.다운로드"></script>
+<script src="./언론유닛 홍보 실적 대시보드 2021–2026_files/html2canvas.min.js.다운로드"></script>
+<script src="./언론유닛 홍보 실적 대시보드 2021–2026_files/jspdf.umd.min.js.다운로드"></script>
+<link href="./언론유닛 홍보 실적 대시보드 2021–2026_files/css2" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f3ef;--surface:#fff;--surface2:#f9f8f5;
+  --border:rgba(0,0,0,0.08);--text:#1a1a18;--text2:#6b6b65;--text3:#9e9e96;
+  --green:#2d6a4f;--blue:#1a3a6b;--amber:#b5601a;--pink:#7a2845;
+  --purple:#5b4a8a;--gray:#888780;--red:#8b2020;--teal:#1a7a6a;
+  --r:12px;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+
+.header{background:var(--green);color:#fff;padding:1.5rem 2.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header h1{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.header p{font-size:12px;opacity:.65;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.hbadge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.pdf-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
+.pdf-btn:hover{background:rgba(255,255,255,.28)}
+.pdf-btn:active{transform:scale(0.97)}
+
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;overflow-x:auto}
+.tab{padding:13px 18px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;font-family:'Noto Sans KR',sans-serif;white-space:nowrap}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--green);border-bottom-color:var(--green)}
+
+.main{padding:2rem 2.5rem;max-width:1280px;margin:0 auto}
+.sec{display:none}.sec.active{display:block}
+
+/* 메트릭 카드 */
+.mrow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.mc.g::before{background:var(--green)}.mc.a::before{background:var(--amber)}
+.mc.b::before{background:var(--blue)}.mc.p::before{background:var(--pink)}.mc.t::before{background:var(--teal)}
+.mlabel{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.mval{font-size:30px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:-.02em}
+.munit{font-size:13px;font-weight:400;color:var(--text2);margin-left:2px}
+.msub{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* 카드 레이아웃 */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:1.5rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem}
+.ctitle{font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.csub{font-size:11px;color:var(--text3);margin-bottom:1rem}
+.cwrap{position:relative;width:100%}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.ldot{width:10px;height:10px;border-radius:2px;flex-shrink:0;display:inline-block;margin-right:4px}
+.li{display:flex;align-items:center;font-size:12px;color:var(--text2)}
+
+/* 배지 & 알림 */
+.alist{display:flex;flex-direction:column}
+.aitem{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.aitem:last-child{border-bottom:none}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;font-family:'DM Mono',monospace}
+.bd{background:#fce8e8;color:#8b2020}.bw{background:#fef0e0;color:#8b4a10}
+.bi{background:#e6eef8;color:#1a3a6b}.bo{background:#e6f4eb;color:#1a472a}
+.atxt{flex:1;font-size:13px;color:var(--text2);line-height:1.5}
+.atitle{font-weight:600;color:var(--text);font-size:13px;margin-bottom:2px}
+
+/* 태그 클라우드 */
+.tcloud{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:5px 14px;border-radius:20px;font-size:13px;font-weight:500;cursor:default;transition:transform .15s}
+.tag:hover{transform:scale(1.05)}
+
+/* 담당자 카드 */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.scard{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem}
+.sname{font-weight:700;font-size:14px;margin-bottom:6px}
+.sbar-w{background:var(--bg);border-radius:4px;height:5px;margin-bottom:5px;overflow:hidden}
+.sbar{height:100%;border-radius:4px;background:var(--green)}
+.srow{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:3px}
+.scnt{font-family:'DM Mono',monospace;font-weight:500;color:var(--text)}
+
+/* 연도 비교 */
+.cmp-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:1.5rem}
+.cmp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem}
+.cmp-yr{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.cmp-val{font-size:24px;font-weight:700;font-family:'DM Mono',monospace}
+.cmp-diff{font-size:11px;margin-top:4px}
+.up{color:#2d6a4f}.dn{color:#8b2020}.eq{color:var(--text3)}
+
+/* PDF UI */
+.pdf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;align-items:center;justify-content:center}
+.pdf-modal.show{display:flex}
+.pdf-modal-box{background:#fff;border-radius:16px;padding:2rem;width:360px;max-width:90vw;font-family:'Noto Sans KR',sans-serif}
+.pdf-modal-title{font-size:16px;font-weight:700;color:#1a1a18;margin-bottom:6px}
+.pdf-modal-sub{font-size:13px;color:#6b6b65;margin-bottom:1.25rem;line-height:1.5}
+.pdf-option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:10px;border:1.5px solid #e8e8e4;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.pdf-option:hover,.pdf-option.selected{border-color:#2d6a4f;background:#f0f7f3}
+.pdf-option-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.pdf-option-label{font-size:13px;font-weight:600;color:#1a1a18}
+.pdf-option-desc{font-size:11px;color:#9e9e96;margin-top:1px}
+.pdf-modal-actions{display:flex;gap:8px;margin-top:1.25rem}
+.pdf-cancel{flex:1;padding:10px;border-radius:8px;border:1px solid #e8e8e4;background:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'Noto Sans KR',sans-serif;color:#6b6b65}
+.pdf-confirm{flex:2;padding:10px;border-radius:8px;border:none;background:#2d6a4f;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:background .2s}
+.pdf-confirm:hover{background:#1a472a}
+.pdf-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.pdf-overlay.show{display:flex}
+.pdf-spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pdf-msg{color:#fff;font-size:15px;font-weight:500;font-family:'Noto Sans KR',sans-serif}
+
+footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:2rem}
+
+/* 연도 필터 버튼 */
+.ybtn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
+.ybtn:hover{border-color:var(--green);color:var(--green)}
+.ybtn.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* 담당자 선택 버튼 */
+.staff-sel-btn{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
+.staff-sel-btn:hover{border-color:var(--blue);color:var(--blue)}
+.staff-sel-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* 구분 배지 색 */
+.tag-type{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap}
+.tag-취재지원{background:#e6f4eb;color:#1a472a}
+.tag-보도자료{background:#e6eef8;color:#1a3a6b}
+.tag-방송{background:#fbeaf0;color:#72243e}
+.tag-칼럼{background:#eeedfe;color:#3c3489}
+.tag-특집기사{background:#fef0e0;color:#8b4a10}
+.tag-기타{background:#f1f0ec;color:#555}
+.tag-해외홍보{background:#e1f5ee;color:#0f6e56}
+.tag-도움말자료{background:#e6f4eb;color:#1a472a}
+
+/* 테이블 스타일 */
+#staff-table tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+#staff-table tbody tr:hover{background:var(--surface2)}
+#staff-table td{padding:9px 10px;vertical-align:top;color:var(--text);font-size:13px}
+#staff-table td:first-child{font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);white-space:nowrap}
+#staff-table td:nth-child(2){font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);white-space:nowrap}
+#staff-table td:nth-child(4){font-weight:600;white-space:nowrap}
+#staff-table td:last-child{color:var(--text3);font-size:12px;white-space:nowrap}
+
+@media(max-width:1024px){.mrow{grid-template-columns:repeat(3,1fr)}.cmp-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.mrow{grid-template-columns:repeat(2,1fr)}.g2,.g3{grid-template-columns:1fr}.sgrid{grid-template-columns:repeat(2,1fr)}.cmp-grid{grid-template-columns:repeat(2,1fr)}.main{padding:1.25rem 1rem}.header{padding:1.25rem 1rem;flex-direction:column;align-items:flex-start;gap:10px}.nav{padding:0 1rem}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <h1>언론유닛 홍보 실적 대시보드</h1>
+    <p>서울아산병원 홍보팀 · 2021–2026 전체 데이터 기준</p>
+  </div>
+  <div class="header-right">
+    <div class="hbadge">2021–2026</div>
+    <button class="pdf-btn" onclick="openPdfModal()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      PDF 저장
+    </button>
+  </div>
+</header>
+
+<!-- PDF 모달 -->
+<div class="pdf-modal" id="pdfModal">
+  <div class="pdf-modal-box">
+    <div class="pdf-modal-title">PDF 내보내기</div>
+    <div class="pdf-modal-sub">저장할 범위를 선택하세요</div>
+    <div class="pdf-option selected" id="opt-current" onclick="selectOpt(&#39;current&#39;)">
+      <div class="pdf-option-icon">📄</div>
+      <div><div class="pdf-option-label">현재 탭만</div><div class="pdf-option-desc">지금 보고 있는 탭 1페이지</div></div>
+    </div>
+    <div class="pdf-option" id="opt-all" onclick="selectOpt(&#39;all&#39;)">
+      <div class="pdf-option-icon">📋</div>
+      <div><div class="pdf-option-label">전체 탭 모두</div><div class="pdf-option-desc">5개 탭 전부 순서대로 저장</div></div>
+    </div>
+    <div class="pdf-modal-actions">
+      <button class="pdf-cancel" onclick="closePdfModal()">취소</button>
+      <button class="pdf-confirm" onclick="startPdf()">PDF 생성</button>
+    </div>
+  </div>
+</div>
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-spinner"></div>
+  <div class="pdf-msg" id="pdfMsg">PDF 생성 중...</div>
+</div>
+
+<nav class="nav">
+  <button class="tab active" onclick="show(&#39;overview&#39;)">📊 전체 현황</button>
+  <button class="tab" onclick="show(&#39;compare&#39;)">📈 연도별 비교</button>
+  <button class="tab" onclick="show(&#39;y2026&#39;)">🔆 2026년 상세</button>
+  <button class="tab" onclick="show(&#39;dept&#39;)">🏥 진료과 분석</button>
+  <button class="tab" onclick="show(&#39;staff&#39;)">👥 담당자 현황</button>
+  <button class="tab" onclick="show(&#39;terms&#39;)">🔍 키워드 · 브랜딩</button>
+</nav>
+
+<main class="main">
+
+<!-- ① 전체 현황 -->
+<section class="sec active" id="sec-overview">
+  <div class="mrow">
+    <div class="mc g"><div class="mlabel">총 홍보 건수</div><div class="mval">1,113<span class="munit">건</span></div><div class="msub">2021~2026 누적</div></div>
+    <div class="mc a"><div class="mlabel">연평균 건수</div><div class="mval">186<span class="munit">건</span></div><div class="msub">6개년 기준</div></div>
+    <div class="mc b"><div class="mlabel">역대 최다 연도</div><div class="mval">2022<span class="munit">년</span></div><div class="msub">236건</div></div>
+    <div class="mc p"><div class="mlabel">2026 YTD</div><div class="mval">105<span class="munit">건</span></div><div class="msub">1~5월 누계</div></div>
+    <div class="mc t"><div class="mlabel">참여 담당자</div><div class="mval">11<span class="munit">명</span></div><div class="msub">6개년 전체</div></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">구분별 전체 비중</div><div class="csub">2021~2026 누적 1,113건</div>
+      <div class="legend">
+        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원 293건</span>
+        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료 281건</span>
+        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼 140건</span>
+        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송 133건</span>
+        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사 91건</span>
+        <span class="li"><span class="ldot" style="background:#888780"></span>기타 175건</span>
+      </div>
+      <div class="cwrap" style="height:250px"><canvas id="c-type" role="img" aria-label="구분별 홍보 건수 도넛 차트" width="949" height="437" style="display: block; box-sizing: border-box; height: 250px; width: 542px;">취재지원 293건, 보도자료 281건, 칼럼 140건, 방송 133건, 특집기사 91건, 기타 175건</canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">연도별 총 건수 추이</div><div class="csub">2021→2026 연도별 홍보 실적</div>
+      <div class="cwrap" style="height:290px"><canvas id="c-yr-bar" role="img" aria-label="연도별 총 홍보 건수 막대 차트" width="949" height="507" style="display: block; box-sizing: border-box; height: 290px; width: 542px;">2021:149건, 2022:236건, 2023:212건, 2024:198건, 2025:213건, 2026:105건</canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">연도별 구분 비교 (누적 막대)</div><div class="csub">유형별 변화 추이</div>
+    <div class="legend">
+      <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원</span>
+      <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료</span>
+      <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼</span>
+      <span class="li"><span class="ldot" style="background:#7a2845"></span>방송</span>
+      <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사</span>
+      <span class="li"><span class="ldot" style="background:#888780"></span>기타</span>
+    </div>
+    <div class="cwrap" style="height:280px"><canvas id="c-stacked" role="img" aria-label="연도별 구분 누적 막대 차트" width="2013" height="490" style="display: block; box-sizing: border-box; height: 280px; width: 1150px;"></canvas></div>
+  </div>
+</section>
+
+<!-- ② 연도별 비교 -->
+<section class="sec" id="sec-compare">
+  <div class="cmp-grid">
+    <div class="cmp-card"><div class="cmp-yr">2021</div><div class="cmp-val">149건</div><div class="cmp-diff eq">기준연도</div><div style="font-size:11px;color:var(--text3);margin-top:5px">보도자료 중심<br>신윤호·이다예 활약</div></div>
+    <div class="cmp-card"><div class="cmp-yr">2022</div><div class="cmp-val">236건</div><div class="cmp-diff up">▲ +87건 vs 2021</div><div style="font-size:11px;color:var(--text3);margin-top:5px">역대 최다<br>해외홍보 본격화</div></div>
+    <div class="cmp-card"><div class="cmp-yr">2023</div><div class="cmp-val">212건</div><div class="cmp-diff dn">▼ −24건 vs 2022</div><div style="font-size:11px;color:var(--text3);margin-top:5px">특집기사 증가<br>김준호 합류</div></div>
+    <div class="cmp-card"><div class="cmp-yr">2024</div><div class="cmp-val">198건</div><div class="cmp-diff dn">▼ −14건 vs 2023</div><div style="font-size:11px;color:var(--text3);margin-top:5px">의정갈등 영향<br>박준규 성장</div></div>
+    <div class="cmp-card"><div class="cmp-yr">2025</div><div class="cmp-val">213건</div><div class="cmp-diff up">▲ +15건 vs 2024</div><div style="font-size:11px;color:var(--text3);margin-top:5px">박준규 주력<br>윤주은 성장</div></div>
+    <div class="cmp-card" style="border-color:#2d6a4f"><div class="cmp-yr">2026 (YTD)</div><div class="cmp-val">105건</div><div class="cmp-diff up">연간 환산 약 250건 예상</div><div style="font-size:11px;color:var(--text3);margin-top:5px">1~5월 기준<br>역대급 페이스</div></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">취재지원·보도자료 추이</div><div class="csub">핵심 2가지 유형 연도별 변화</div>
+      <div class="cwrap" style="height:230px"><canvas id="c-trend2" role="img" aria-label="취재지원 보도자료 연도별 추이 라인 차트"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">방송·칼럼·특집기사 추이</div><div class="csub">3가지 유형 연도별 변화</div>
+      <div class="cwrap" style="height:230px"><canvas id="c-trend3" role="img" aria-label="방송 칼럼 특집기사 연도별 추이 라인 차트"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">연도별 구분 비율 변화 (%)</div><div class="csub">전체 대비 각 유형의 비중 변화</div>
+    <div class="cwrap" style="height:260px"><canvas id="c-ratio" role="img" aria-label="연도별 구분 비율 라인 차트"></canvas></div>
+  </div>
+</section>
+
+<!-- ③ 2026년 상세 -->
+<section class="sec" id="sec-y2026">
+  <div class="mrow">
+    <div class="mc g"><div class="mlabel">2026 총 건수 (YTD)</div><div class="mval">208<span class="munit">건</span></div><div class="msub">1~5월 기준</div></div>
+    <div class="mc a"><div class="mlabel">월 평균</div><div class="mval">41.6<span class="munit">건</span></div><div class="msub">연간 환산 약 250건</div></div>
+    <div class="mc b"><div class="mlabel">최다 담당 (박준규)</div><div class="mval">52<span class="munit">건</span></div><div class="msub">전체의 25%</div></div>
+    <div class="mc p"><div class="mlabel">최다 진료과 (GI)</div><div class="mval">17<span class="munit">건</span></div><div class="msub">소화기내과</div></div>
+    <div class="mc t"><div class="mlabel">최다 교수 (최재순·김희정)</div><div class="mval">5<span class="munit">건</span></div><div class="msub">각 5건 공동 1위</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">월별 건수 추이</div><div class="csub">2026년 1~5월</div>
+      <div class="cwrap" style="height:220px"><canvas id="c26-month" role="img" aria-label="2026년 월별 홍보 건수">1월 37건, 2월 28건, 3월 41건, 4월 43건, 5월 59건</canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">구분별 분포</div><div class="csub">2026년 208건</div>
+      <div class="legend">
+        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원 94</span>
+        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료 73</span>
+        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송 16</span>
+        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사 9</span>
+        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼 8</span>
+        <span class="li"><span class="ldot" style="background:#888780"></span>기타 8</span>
+      </div>
+      <div class="cwrap" style="height:200px"><canvas id="c26-type" role="img" aria-label="2026년 구분별 홍보 건수 도넛"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">담당자별 건수</div><div class="csub">2026년 기준</div>
+      <div class="cwrap" style="height:220px"><canvas id="c26-staff" role="img" aria-label="2026년 담당자별 건수"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">담당자별 유형 분포</div><div class="csub">2026년 누적 막대</div>
+      <div class="cwrap" style="height:220px"><canvas id="c26-staff-type" role="img" aria-label="2026년 담당자별 유형 분포 누적 막대"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">진료과별 홍보 건수 TOP20</div><div class="csub">2026년 기준</div>
+      <div class="cwrap" style="height:380px"><canvas id="c26-dept" role="img" aria-label="2026년 진료과별 홍보 건수"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">교수별 홍보 건수 TOP20</div><div class="csub">2026년 기준 — 가장 많이 홍보된 교수</div>
+      <div class="cwrap" style="height:380px"><canvas id="c26-prof" role="img" aria-label="2026년 교수별 홍보 건수"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">주요 배포 매체 현황</div><div class="csub">2026년 기준 (미지정 제외)</div>
+    <div class="cwrap" style="height:220px"><canvas id="c26-media" role="img" aria-label="2026년 배포 매체별 건수"></canvas></div>
+  </div>
+</section>
+
+<!-- ④ 진료과 분석 -->
+<section class="sec" id="sec-dept">
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">진료과별 홍보 건수 TOP30</div>
+      <div class="csub">🟦 30건 이상 · 🟩 15~29건 · 🟧 14건 이하</div>
+      <div class="cwrap" style="height:580px"><canvas id="c-dept" role="img" aria-label="진료과별 홍보 건수 수평 막대 차트"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">교수별 홍보 건수 TOP25 (2021~2026)</div>
+      <div class="csub">전체 기간 기준 — 가장 많이 홍보된 의료진</div>
+      <div class="cwrap" style="height:580px"><canvas id="c-prof-all" role="img" aria-label="교수별 전체 홍보 건수 수평 막대 차트"></canvas></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">⚠ 홍보 소외 진료과</div><div class="csub">전체 기간 대비 홍보 빈도 낮은 진료과</div>
+      <div class="alist">
+        <div class="aitem"><span class="badge bd">매우 적음</span><div><div class="atitle">적극 홍보 검토 필요</div><div class="atxt">응급의학과(EM) · 소아응급(PER) · 임상약리학과 · 시뮬레이션센터 · 재난예방 — 전문성 높으나 미디어 노출 부족</div></div></div>
+        <div class="aitem"><span class="badge bw">상대적 부족</span><div><div class="atitle">홍보 강화 필요</div><div class="atxt">성형외과(PS) · 대장항문외과(CRS) · 혈액내과(HEM) · 노인내과(GIM 비율) — 임상 성과 대비 언론 노출 적음</div></div></div>
+        <div class="aitem"><span class="badge bo">집중 노출</span><div><div class="atitle">CV·GI·LTS 압도적 1~3위</div><div class="atxt">심장내과(CV) 78건 · 소화기내과(GI) 55건 · 간이식외과(LTS) 42건 — 병원 대표 홍보 진료과</div></div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">직종별 홍보 현황</div><div class="csub">홍보 주체 유형 분류 (전체 기간)</div>
+      <div class="cwrap" style="height:200px"><canvas id="c-role" role="img" aria-label="직종별 홍보 건수 도넛 차트">의사/교수 75%, 병원 기관 15%, 비의사 직종 10%</canvas></div>
+      <div style="margin-top:10px">
+        <div class="aitem" style="padding:8px 0"><span class="badge bi">TIP</span><div class="atxt">약사·간호사·임상유전상담사 등 비의사 직종 홍보 비중 약 10% — 다양성 확대 여지 있음</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 담당자 현황 -->
+<section class="sec" id="sec-staff">
+  <div class="mrow">
+    <div class="mc g"><div class="mlabel">최다 누적 (최영주)</div><div class="mval">278<span class="munit">건</span></div><div class="msub">전체의 25%</div></div>
+    <div class="mc a"><div class="mlabel">현 주력 (박준규)</div><div class="mval">98<span class="munit">건</span></div><div class="msub">2024~ 급성장</div></div>
+    <div class="mc b"><div class="mlabel">해외홍보 (문지애)</div><div class="mval">86<span class="munit">건</span></div><div class="msub">2022~2024 집중</div></div>
+    <div class="mc p"><div class="mlabel">총 참여 인원</div><div class="mval">11<span class="munit">명</span></div><div class="msub">6개년 전체</div></div>
+    <div class="mc t"><div class="mlabel">1인 연평균</div><div class="mval">32<span class="munit">건</span></div><div class="msub">현재 담당자 기준</div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle">담당자별 연도별 실적 추이</div><div class="csub">주요 담당자 6인 연도별 건수 변화</div>
+    <div class="cwrap" style="height:280px"><canvas id="c-staff-trend" role="img" aria-label="담당자별 연도별 실적 추이 라인 차트"></canvas></div>
+  </div>
+
+  <!-- 담당자 카드 + 연도 필터 -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
+      <div>
+        <div class="ctitle">담당자별 업무 목록</div>
+        <div class="csub" style="margin-bottom:0">이름 클릭 → 해당 담당자 업무 전체 목록 · 연도 선택 → 해당 연도만 표시</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="yr-filter-btns">
+        <button class="ybtn active" onclick="setYrFilter(&#39;전체&#39;)">전체</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2021&#39;)">2021</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2022&#39;)">2022</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2023&#39;)">2023</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2024&#39;)">2024</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2025&#39;)">2025</button>
+        <button class="ybtn" onclick="setYrFilter(&#39;2026&#39;)">2026</button>
+      </div>
+    </div>
+
+    <!-- 담당자 선택 버튼 -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem" id="staff-sel-btns">
+      <button class="staff-sel-btn active" onclick="setStaffFilter(&#39;전체&#39;)">전체</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;최영주&#39;)">최영주</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;전영은&#39;)">전영은</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;오혜성&#39;)">오혜성</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;이다예&#39;)">이다예</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;민경준&#39;)">민경준</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;박준규&#39;)">박준규</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;윤주은&#39;)">윤주은</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;김서영&#39;)">김서영</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;신윤호&#39;)">신윤호</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;문지애&#39;)">문지애</button>
+      <button class="staff-sel-btn" onclick="setStaffFilter(&#39;김준호&#39;)">김준호</button>
+    </div>
+
+    <!-- 요약 바 -->
+    <div id="list-summary" style="display:flex;align-items:center;gap:16px;padding:10px 14px;background:var(--surface2);border-radius:8px;margin-bottom:1rem;font-size:13px;flex-wrap:wrap">
+      <span>전체 <strong id="sum-total">-</strong>건</span>
+      <span style="color:var(--text3)">|</span>
+      <span id="sum-types" style="color:var(--text2)"></span>
+    </div>
+
+    <!-- 목록 테이블 -->
+    <div style="overflow-x:auto">
+      <table id="staff-table" style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border)">
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">연도</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">월</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">구분</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">담당</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em">제목 / 내용</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">진료과</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">배포</th>
+          </tr>
+        </thead>
+        <tbody id="staff-tbody"></tbody>
+      </table>
+      <div id="staff-empty" style="display:none;text-align:center;padding:2rem;color:var(--text3);font-size:13px">해당 조건의 데이터가 없습니다</div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 키워드·브랜딩 -->
+<section class="sec" id="sec-terms">
+  <div class="card">
+    <div class="ctitle">다빈도 키워드 — 브랜딩 활용 권장</div><div class="csub">2021~2026 전체 제목 기반 빈출 용어 · 글자 크기 = 빈도</div>
+    <div class="tcloud" id="tagCloud" style="padding:.5rem 0"></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">주제 클러스터 분포</div><div class="csub">전체 1,113건 주제 분류</div>
+      <div class="legend">
+        <span class="li"><span class="ldot" style="background:#8b2020"></span>암·종양</span>
+        <span class="li"><span class="ldot" style="background:#7a2845"></span>심장·혈관</span>
+        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>소화기</span>
+        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>이식·외과</span>
+        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>AI·기술</span>
+        <span class="li"><span class="ldot" style="background:#b5601a"></span>글로벌·사회공헌</span>
+        <span class="li"><span class="ldot" style="background:#1a7a6a"></span>신경·정신</span>
+        <span class="li"><span class="ldot" style="background:#888780"></span>기타</span>
+      </div>
+      <div class="cwrap" style="height:250px"><canvas id="c-cluster" role="img" aria-label="주제 클러스터 도넛 차트"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="ctitle">브랜딩 인사이트 — 6개년 도출</div><div class="csub">전체 콘텐츠에서 추출한 핵심 방향</div>
+      <div class="alist">
+        <div class="aitem" style="padding:10px 0"><div style="width:32px;height:32px;background:#e6eef8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🏆</div><div><div class="atitle">기록·최초 강조 — 핵심 브랜드 자산</div><div class="atxt">이식 기록·례수 달성(2만례·8천례 등) 반복 등장. "세계 최초·국내 첫" 강조가 신뢰도의 근거</div></div></div>
+        <div class="aitem" style="padding:10px 0"><div style="width:32px;height:32px;background:#e6f4eb;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🌏</div><div><div class="atitle">글로벌 의료 허브 — 지속 강화 중</div><div class="atxt">해외환자 초청진료·K-메디컬·뉴스위크 세계 최고 병원 2021년부터 매년 강조</div></div></div>
+        <div class="aitem" style="padding:10px 0"><div style="width:32px;height:32px;background:#faeeda;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🤖</div><div><div class="atitle">AI·디지털 혁신 — 2024~2026 급부상</div><div class="atxt">의료 AI·로봇수술·빅데이터 관련 콘텐츠 2024년 이후 3배 증가. 미래 핵심 브랜드</div></div></div>
+        <div class="aitem" style="padding:10px 0"><div style="width:32px;height:32px;background:#fce8e8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">❤️</div><div><div class="atitle">사회공헌·나눔 — 꾸준한 스토리텔링</div><div class="atxt">아산재단·후원·아워히어로즈·해외의료봉사 매년 등장. 공공 이미지 강화에 기여</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>서울아산병원 언론유닛 · 홍보 실적 대시보드 · 데이터: 2021~2026 업무 공유 시트 전체 기준 · 2026년은 1~5월 YTD</footer>
+
+<script>
+const gr='rgba(0,0,0,0.06)',tx='#6b6b65';
+const YRS=['2021','2022','2023','2024','2025','2026(YTD)'];
+const TOTALS=[149,236,212,198,213,208];
+const drawn={};
+const tabOrder=['overview','compare','y2026','dept','staff','terms'];
+const tabNames=['전체 현황','연도별 비교','2026년 상세','진료과 분석','담당자 현황','키워드·브랜딩'];
+
+/* ── PDF ── */
+let pdfOpt='current';
+function openPdfModal(){document.getElementById('pdfModal').classList.add('show')}
+function closePdfModal(){document.getElementById('pdfModal').classList.remove('show')}
+function selectOpt(v){pdfOpt=v;document.getElementById('opt-current').classList.toggle('selected',v==='current');document.getElementById('opt-all').classList.toggle('selected',v==='all')}
+function setMsg(m){document.getElementById('pdfMsg').textContent=m}
+function getCurrentTab(){return document.querySelector('.sec.active')?.id.replace('sec-','')||'overview'}
+
+async function captureSection(name){
+  show(name);
+  await new Promise(r=>setTimeout(r,700));
+  return await html2canvas(document.getElementById('sec-'+name),{scale:2,useCORS:true,backgroundColor:'#f4f3ef',logging:false,windowWidth:1280});
+}
+
+async function startPdf(){
+  closePdfModal();
+  const overlay=document.getElementById('pdfOverlay');
+  overlay.classList.add('show');
+  try{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+    const W=pdf.internal.pageSize.getWidth(),H=pdf.internal.pageSize.getHeight();
+    const targets=pdfOpt==='all'?tabOrder:[getCurrentTab()];
+    for(let i=0;i<targets.length;i++){
+      const name=targets[i];
+      setMsg(`캡처 중... ${tabNames[tabOrder.indexOf(name)]} (${i+1}/${targets.length})`);
+      const canvas=await captureSection(name);
+      const imgData=canvas.toDataURL('image/png');
+      if(i>0)pdf.addPage();
+      pdf.setFillColor(45,106,79);pdf.rect(0,0,W,12,'F');
+      pdf.setTextColor(255,255,255);pdf.setFontSize(9);pdf.setFont('helvetica','bold');
+      pdf.text('서울아산병원 언론유닛 홍보 실적 대시보드  |  '+tabNames[tabOrder.indexOf(name)],8,8);
+      pdf.setFont('helvetica','normal');
+      const today=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+      pdf.text(today,W-8,8,{align:'right'});
+      const imgW=W-16,imgH=(canvas.height/canvas.width)*imgW,finalH=Math.min(imgH,H-20);
+      pdf.addImage(imgData,'PNG',8,14,imgW,finalH,'','FAST');
+      pdf.setTextColor(150,150,140);pdf.setFontSize(8);pdf.text(`${i+1} / ${targets.length}`,W/2,H-3,{align:'center'});
+    }
+    setMsg('저장 중...');
+    pdf.save('언론유닛_홍보_대시보드_'+new Date().toISOString().slice(0,10)+'.pdf');
+  }catch(e){alert('PDF 생성 오류: '+e.message);console.error(e);}
+  finally{overlay.classList.remove('show')}
+}
+
+/* ── 탭 전환 ── */
+function show(name){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.querySelectorAll('.tab')[tabOrder.indexOf(name)].classList.add('active');
+  if(!drawn[name]){
+    if(name==='compare')drawCompare();
+    if(name==='y2026')draw2026();
+    if(name==='dept')drawDept();
+    if(name==='staff')drawStaff();
+    if(name==='terms')drawTerms();
+    drawn[name]=true;
+  }
+}
+
+/* ── 전체 현황 ── */
+new Chart(document.getElementById('c-type'),{type:'doughnut',data:{labels:['취재지원','보도자료','칼럼','방송','특집기사','기타'],datasets:[{data:[293,281,140,133,91,175],backgroundColor:['#2d6a4f','#1a3a6b','#5b4a8a','#7a2845','#b5601a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+new Chart(document.getElementById('c-yr-bar'),{type:'bar',data:{labels:YRS,datasets:[{data:TOTALS,backgroundColor:['#888780','#1a3a6b','#888780','#888780','#2d6a4f','#b5601a'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+new Chart(document.getElementById('c-stacked'),{type:'bar',data:{labels:YRS,datasets:[
+  {label:'취재지원',data:[38,60,55,52,58,30],backgroundColor:'#2d6a4f',borderRadius:2},
+  {label:'보도자료',data:[45,55,50,48,55,28],backgroundColor:'#1a3a6b',borderRadius:2},
+  {label:'칼럼',data:[25,35,20,28,32,12],backgroundColor:'#5b4a8a',borderRadius:2},
+  {label:'방송',data:[18,28,30,25,22,10],backgroundColor:'#7a2845',borderRadius:2},
+  {label:'특집기사',data:[8,18,22,15,18,10],backgroundColor:'#b5601a',borderRadius:2},
+  {label:'기타',data:[15,40,35,30,28,15],backgroundColor:'#888780',borderRadius:2},
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12,boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+
+/* ── 연도별 비교 ── */
+function drawCompare(){
+  new Chart(document.getElementById('c-trend2'),{type:'line',data:{labels:YRS,datasets:[
+    {label:'취재지원',data:[38,60,55,52,58,30],borderColor:'#2d6a4f',backgroundColor:'rgba(45,106,79,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
+    {label:'보도자료',data:[45,55,50,48,55,28],borderColor:'#1a3a6b',backgroundColor:'rgba(26,58,107,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+  new Chart(document.getElementById('c-trend3'),{type:'line',data:{labels:YRS,datasets:[
+    {label:'방송',data:[18,28,30,25,22,10],borderColor:'#7a2845',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#7a2845'},
+    {label:'칼럼',data:[25,35,20,28,32,12],borderColor:'#5b4a8a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[5,3]},
+    {label:'특집기사',data:[8,18,22,15,18,10],borderColor:'#b5601a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#b5601a',borderDash:[3,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+  new Chart(document.getElementById('c-ratio'),{type:'line',data:{labels:['2021','2022','2023','2024','2025'],datasets:[
+    {label:'취재지원(%)',data:[26,25,26,26,27],borderColor:'#2d6a4f',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
+    {label:'보도자료(%)',data:[30,23,24,24,26],borderColor:'#1a3a6b',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
+    {label:'칼럼(%)',data:[17,15,9,14,15],borderColor:'#5b4a8a',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[3,3]},
+    {label:'방송(%)',data:[12,12,14,13,10],borderColor:'#7a2845',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#7a2845'},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx,callback:v=>v+'%'},beginAtZero:true,max:40}}}});
+}
+
+/* ── 2026년 상세 ── */
+function draw2026(){
+  new Chart(document.getElementById('c26-month'),{type:'bar',data:{labels:['1월','2월','3월','4월','5월'],datasets:[{data:[37,28,41,43,59],backgroundColor:['#888780','#888780','#2d6a4f','#2d6a4f','#1a3a6b'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+  new Chart(document.getElementById('c26-type'),{type:'doughnut',data:{labels:['취재지원 94','보도자료 73','방송 16','특집기사 9','칼럼 8','기타 8'],datasets:[{data:[94,73,16,9,8,8],backgroundColor:['#2d6a4f','#1a3a6b','#7a2845','#b5601a','#5b4a8a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+  new Chart(document.getElementById('c26-staff'),{type:'bar',data:{labels:['박준규','전영은','최영주','윤주은','오혜성','김서영'],datasets:[{data:[52,43,40,35,30,8],backgroundColor:['#1a3a6b','#2d6a4f','#b5601a','#7a2845','#5b4a8a','#888780'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx}}}}});
+
+  new Chart(document.getElementById('c26-staff-type'),{type:'bar',data:{labels:['박준규','전영은','최영주','윤주은','오혜성','김서영'],datasets:[
+    {label:'취재지원',data:[26,20,8,18,15,0],backgroundColor:'#2d6a4f',borderRadius:2},
+    {label:'보도자료',data:[18,17,18,10,5,3],backgroundColor:'#1a3a6b',borderRadius:2},
+    {label:'방송',data:[4,8,6,1,1,0],backgroundColor:'#7a2845',borderRadius:2},
+    {label:'특집기사',data:[3,4,3,1,0,0],backgroundColor:'#b5601a',borderRadius:2},
+    {label:'칼럼',data:[0,0,0,1,8,0],backgroundColor:'#5b4a8a',borderRadius:2},
+    {label:'기타',data:[1,0,5,4,1,5],backgroundColor:'#888780',borderRadius:2},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+
+  const d26=['GI','CV','NR','GIM','URO','PLM','ENT','FM','의공학연구소','OPH','NS','ONC','BR','DER','OBY','LTS','END','융합의학과','EM','PSY','CS','INF','ALG','PCS','PHO'];
+  const v26=[17,14,8,7,7,6,6,5,5,5,5,5,5,5,4,4,4,4,4,3,3,3,3,3,3];
+  new Chart(document.getElementById('c26-dept'),{type:'bar',data:{labels:d26,datasets:[{data:v26,backgroundColor:v26.map(v=>v>=10?'#1a3a6b':v>=5?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
+
+  const profs26=['최재순','김희정','안정민','장건영','서준교','임영석','원종현','사호석','김준성','전인호','신동명','임호준','박덕우','조성양','송시열','이승규','강덕현','강우석','유달산','이병섭','변정식','홍석호','윤덕현','이은주','권혁수'];
+  const pvals26=[5,5,4,4,4,4,4,4,4,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2];
+  new Chart(document.getElementById('c26-prof'),{type:'bar',data:{labels:profs26,datasets:[{data:pvals26,backgroundColor:pvals26.map(v=>v>=5?'#7a2845':v>=3?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx,stepSize:1}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
+
+  new Chart(document.getElementById('c26-media'),{type:'bar',data:{labels:['일간지','KBS','한국일보','전문지','서울신문','매일경제','일간지헬스','헬스경향','중앙일보','EBS','조선일보','뉴스1'],datasets:[{data:[25,11,10,9,8,8,8,7,7,4,4,4],backgroundColor:'#1a3a6b',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:12}}}}}});
+}
+
+/* ── 진료과 ── */
+function drawDept(){
+  const depts=['CV','GI','LTS','NR','OS','OPH','BR','ENT','ONC','PSY','CS','GIM','PLM','NS','OBY','ALG','END','URO','PS','INF','PPS','HBP','RHE','CRS','FM','DER','PHO','RM','MG','KT'];
+  const vals=[78,55,42,38,36,32,30,28,27,25,24,23,22,20,20,18,17,16,15,14,13,12,11,10,10,10,9,9,9,8];
+  new Chart(document.getElementById('c-dept'),{type:'bar',data:{labels:depts,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=30?'#1a3a6b':v>=15?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
+
+  // 교수별 전체 집계 (2021~2026)
+  const profNames=['정희원','박승정','박덕우','이승규','김희정','정석훈','이범희','권순억','김도훈','김성훈','임영석','김용길','유창훈','이대호','정선주','김남국','박홍주','이세원','전인호','김기훈','사호석','이준엽','김대희','황대욱','장일영'];
+  const profVals=[38,35,32,30,28,25,24,22,22,20,20,18,18,17,17,16,16,15,15,14,14,14,13,12,12];
+  new Chart(document.getElementById('c-prof-all'),{type:'bar',data:{labels:profNames,datasets:[{data:profVals,backgroundColor:profVals.map(v=>v>=30?'#7a2845':v>=20?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
+
+  new Chart(document.getElementById('c-role'),{type:'doughnut',data:{labels:['의사/교수 (75%)','병원 기관 (15%)','비의사 직종 (10%)'],datasets:[{data:[75,15,10],backgroundColor:['#2d6a4f','#1a3a6b','#b5601a'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12}}}}});
+}
+
+/* ── 담당자 ── */
+function drawStaff(){
+  new Chart(document.getElementById('c-staff-trend'),{type:'line',data:{labels:['2021','2022','2023','2024','2025','2026'],datasets:[
+    {label:'최영주',data:[32,68,55,58,45,20],borderColor:'#2d6a4f',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
+    {label:'전영은',data:[18,30,38,35,40,15],borderColor:'#1a3a6b',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
+    {label:'박준규',data:[2,5,8,15,38,30],borderColor:'#b5601a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#b5601a'},
+    {label:'오혜성',data:[20,30,22,25,35,14],borderColor:'#7a2845',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#7a2845',borderDash:[3,3]},
+    {label:'이다예',data:[28,35,20,25,18,5],borderColor:'#5b4a8a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#5b4a8a'},
+    {label:'민경준',data:[22,38,30,28,10,0],borderColor:'#888780',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#888780',borderDash:[2,2]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+  // 초기 테이블 렌더
+  renderTable();
+}
+
+/* ── 전체 데이터 + 담당자 필터 ── */
+const ALL_DATA = [
+  [2021,'1','보도자료','이다예','이영애씨 1억 기부','대외협력팀','일간지'],
+  [2021,'1','방송','이다예','KBS재난방송센터 코로나블루','PSY',''],
+  [2021,'1','취재지원','이다예','연합뉴스 고관절질환 인터뷰','OS',''],
+  [2021,'1','보도자료','이다예','아산의학상 수상자 선정','아산재단','전체'],
+  [2021,'1','보도자료','이다예','난청환자 인공와우 수술결과 예측','ENT','일간지헬스'],
+  [2021,'1','방송','이다예','KBS 무물보','OPH',''],
+  [2021,'2','칼럼','이다예','마이트라클립 승모판역류증 시술','CV','파이낸셜'],
+  [2021,'2','보도자료','이다예','장애인 비장애인 심혈관질환 사망률','FM','일간지헬스'],
+  [2021,'2','취재지원','이다예','국민일보 생활치료센터 파견 의료진','수술간호팀',''],
+  [2021,'2','보도자료','이다예','박덕우 교수 JACC ASIA 부편집장','CV','전문지'],
+  [2021,'1','칼럼','전영은','금연 올해에는 꼭 성공하려면','FM','대한전문건설신문'],
+  [2021,'1','칼럼','전영은','노인과 낙상','GIM','대한전문건설신문'],
+  [2021,'2','보도자료','전영은','온라인 의무기록 사본 발급 시스템','의료정보관리팀','일간지'],
+  [2021,'2','취재지원','최영주','한국일보 설명절 근무 간호사 인터뷰','101병동','한국일보'],
+  [2021,'3','보도자료','최영주','뉴스위크 선정 2021 세계 최고 병원','','일간지'],
+  [2021,'3','특집기사','최영주','이데일리 굿닥터 구순구개열 수술','PS','이데일리'],
+  [2021,'3','보도자료','최영주','아산 정주영 20주기 추모사업','아산재단','전체'],
+  [2021,'3','보도자료','민경준','제14회 아산의학상 시상식','아산재단',''],
+  [2021,'3','보도자료','오혜성','관상동맥 경피적관상동맥우회술 다기관연구','CV','전문지'],
+  [2021,'3','보도자료','오혜성','BMI지수와 알츠하이머의 상관관계','INT/FM','일간지'],
+  [2021,'4','칼럼','오혜성','전립선 비대증과 전립선암','URO','대한전문건설신문'],
+  [2021,'4','보도자료','최영주','염증성장질환 치료제 정맥주사 피하주사 효과 비교','GI','헬스'],
+  [2021,'4','보도자료','최영주','15년간 임상경험 담은 선수술 양악 접근법 영문책','PS','헬스'],
+  [2021,'5','보도자료','최영주','이산화질소 파킨슨병 발생 위험인자 연구','NR','방송/일간지'],
+  [2021,'5','보도자료','민경준','벨바라베닙 RAS RAF 암 치료 효과 네이처','ONC','헬스'],
+  [2021,'5','특집기사','오혜성','이데일리 굿클리닉 부인암센터','OBY','이데일리'],
+  [2021,'5','보도자료','민경준','서울아산병원 ESG위원회 발족','','일간지'],
+  [2021,'6','방송','신윤호','EBS명의 담도 및 담낭 질환','LTS/GI','EBS'],
+  [2021,'6','보도자료','최영주','코로나에도 전세계 의학자 방문','심장병원/ENT/LTS','전문지'],
+  [2021,'6','보도자료','민경준','자궁내막암 환자 가임력 보존 약물','OBY','일간지'],
+  [2021,'6','보도자료','신윤호/박준규','간동맥화학색전술 10만례','DR','일간지헬스'],
+  [2021,'6','보도자료','최영주','miR-122 유전자 허혈성 간손상 기전','의생명연구소','전문지'],
+  [2021,'7','방송','최영주','KBS 생로병사 여성 심장질환','CV','KBS'],
+  [2021,'7','특집기사','최영주','코로나 불구 전세계 의학자 방문 이어져','국제사업실','매일경제 펄스'],
+  [2021,'7','특집기사','신윤호','경향 특집기사 림프부종','PS','경향신문'],
+  [2021,'7','특집기사','최영주','뉴시스 특집기사 서울아산병원','','뉴시스'],
+  [2021,'7','보도자료','전영은','연구중심병원 3유닛 선정','아산생명과학연구원','헬스/전문지'],
+  [2021,'7','방송','최영주','JTBC 특집 다큐멘터리 닥터앤서','MG','JTBC'],
+  [2021,'8','보도자료','오혜성','전치태반 산모의 자궁동맥색전술','OBY','일간지'],
+  [2021,'8','특집기사','최영주','한국일보 전문의에게 듣는다 소아전문응급센터','EM','한국일보'],
+  [2021,'8','특집기사','민경준','한국일보 전문의에게 듣는다 젊은 유방암클리닉','BR','한국일보'],
+  [2021,'8','특집기사','신윤호','한국일보 전문의에게 듣는다 골다공증클리닉','OS','한국일보'],
+  [2021,'9','보도자료','최영주','국내 가장 작은 아기 288g 건우','NEO','방송/일간지'],
+  [2021,'10','보도자료','최영주','뉴스위크 2022 분야별 세계 최고 병원','','일간지'],
+  [2021,'10','특집기사','최영주','이데일리 굿클리닉 신경섬유종클리닉','MG','이데일리'],
+  [2021,'10','보도자료','민경준','아산상','',''],
+  [2021,'11','특집기사','최영주','경향신문 특집 중증 심장질환 글로벌 병원','심장병원','경향신문'],
+  [2021,'11','특집기사','최영주','펄스 기획기사 글로벌 중증치료 전문병원','서울아산병원','펄스'],
+  [2021,'11','특집기사','최영주','데일리메디 특집 글로벌 중증치료 전문병원','서울아산병원','데일리메디'],
+  [2021,'12','특집기사','민경준','암병원 특집 기사','암병원','파이낸셜뉴스'],
+  [2021,'12','특집기사','민경준','암병원 특집 기사','암병원','한국경제'],
+  [2022,'1','보도자료','최영주','당뇨 전단계서도 대사질환 위험 높아','FM','일간지'],
+  [2022,'1','보도자료','최영주','디지털 병리 전면 도입','DP','일간지'],
+  [2022,'1','방송','최영주','KBS 생로병사 20주년 특집 한국 의료의 혁신가들','LTS/CV/NR/GIM','KBS'],
+  [2022,'1','방송','최영주','SBS 뉴스토리 항암제 포괄수가제','ONC','SBS'],
+  [2022,'1','취재지원','최영주','헬스인뉴스 내시경초음파검사 취재','GI','헬스인뉴스'],
+  [2022,'1','취재지원','최영주','조선일보 장기이식센터 해외환자 사례','ENT','조선일보'],
+  [2022,'1','칼럼','최영주','한국일보 온라인 건강칼럼 뇌졸중','NR','한국일보'],
+  [2022,'1','보도자료','전영은','신간안내 대한폐경학회 발간 폐경기 건강','OBY','일간지헬스'],
+  [2022,'1','칼럼','전영은','건강팁 갑상선암','END','서울경제'],
+  [2022,'1','보도자료','오혜성','소변 검사로 루푸스 신염 진단 가능','RHE/융합','일간지헬스'],
+  [2022,'1','취재지원','오혜성','인터뷰 폐암 치료를 선도하는 의사','ONC','데일리메디'],
+  [2022,'1','취재지원','오혜성','인터뷰 감염관리실장 국민일보','INF','국민일보'],
+  [2022,'1','방송','민경준','EBS나눔0700 골간형성이상 환자','MG','EBS'],
+  [2022,'1','보도자료','민경준','뉴스룸 오픈','',''],
+  [2022,'1','보도자료','민경준','아산의학상','아산재단',''],
+  [2022,'1','특집기사','민경준','문화일보 암병원 특집 기사','암병원','문화일보'],
+  [2022,'2','보도자료','최영주','말기 폐부전 환자 폐이식 200례 달성','폐이식팀','일간지'],
+  [2022,'2','방송','최영주','KBS 재난방송센터 노인 우울증','PSY','KBS'],
+  [2022,'2','캠페인','최영주','코로나 블루 함께 이겨냅시다 캠페인','PSY','뉴스룸/홈페이지/일간지'],
+  [2022,'3','보도자료','최영주','뉴스위크 2022 세계 최고 병원 국내 1위 세계 30위','','일간지'],
+  [2022,'3','특집기사','최영주','데일리메디 봄호 특집기사 뉴스위크 세계 최고 병원','','데일리메디'],
+  [2022,'3','방송','전영은','EBS명의 15주년 특집 치매','NR/PSY','EBS'],
+  [2022,'4','보도자료','민경준','로봇수술 연간 최다','로봇수술센터',''],
+  [2022,'4','보도자료','오혜성','대동맥판막 스텐트 시술 후 최적의 항혈전제','CV',''],
+  [2022,'4','특집기사','최영주','데일리메디 봄호 특집기사 뉴스위크 세계 최고 병원','','데일리메디'],
+  [2022,'5','보도자료','최영주','노인 근감소와 천식 연관성 확인','ALG/GIM','방송/일간지'],
+  [2022,'5','보도자료','최영주','후복막 내시경 부신 절제술 1000례','ES','일간지'],
+  [2022,'6','보도자료','이다예','AIMS 2022 심포지엄 성황리 종료','','전문지'],
+  [2022,'6','보도자료','이다예','온라인 의무기록사본 파일 발급 서비스','INF','전문지'],
+  [2022,'6','취재지원','이다예','매일경제 건강한 단백질 섭취','노년내과',''],
+  [2022,'7','보도자료','이다예','AP VALVE 개최 보도자료','CV','전문지'],
+  [2022,'7','보도자료','이다예','심장병원 TAVI 우수 교육기관 선정','심장병원',''],
+  [2022,'7','취재지원','이다예','조선일보 김기훈 교수 방글라데시 근로자 후원','LTS','조선일보'],
+  [2022,'7','SNS','이다예','우리 주변의 자폐는 이상한 변호사 우영우','PPS',''],
+  [2022,'8','보도자료','이다예','임상약리학과 썸머스쿨 인턴십 후속 보도자료','임상약리학과','전문지'],
+  [2022,'8','보도자료','이다예','NEJM-PCI 시술 후 정기검진 유효성','CV',''],
+  [2022,'8','취재지원','이다예','명의를 찾아서 안정민 교수님','CV','조선비즈'],
+  [2022,'8','취재지원','이다예','박승정교수 NEJM 개인 통산 6번째 게재','CV','중앙일보'],
+  [2022,'8','방송','이다예','KBS다큐온 디지털의료','CV','KBS'],
+  [2022,'9','보도자료','이다예','제34회 아산상 수상자 발표','아산재단','일간지'],
+  [2022,'10','특집기사','이다예','한국일보 특집 전문의에게 듣는다 CV','CV','한국일보'],
+  [2022,'10','방송','이다예','JTBC뉴스룸 자폐인 평균수명 짧아','PPS','JTBC'],
+  [2022,'10','방송','이다예','EBS명의 박덕우 교수편','CV','EBS'],
+  [2022,'10','위기대응','이다예','신생아중환자실 결핵 관련 안내문 제작','NEO',''],
+  [2022,'11','특집기사','이다예','경향신문 심장병원','심장병원','경향신문'],
+  [2022,'11','취재지원','이다예','중앙일보 소아암 환자 원정치료 실태','소아종양혈액과','중앙일보'],
+  [2022,'11','특집기사','이다예','이데일리 뇌졸중센터','뇌졸중센터','이데일리'],
+  [2022,'11','보도자료','이다예','이노베이션디자인센터 이노베이션챌린지','IDC',''],
+  [2022,'12','보도자료','이다예','초소형 부정맥 치료기 마이크라 국내 첫 100례','CV',''],
+  [2022,'12','취재지원','이다예','인공각막 임상시험 관련 인터뷰 지원','OPH','경향'],
+  [2022,'9','보도자료','최영주','뉴스위크 2023 분야별 세계 최고 병원','','일간지'],
+  [2022,'10','보도자료','최영주','간이식으로 선물 받은 30년 국내 간이식 최장기 생존','LTS','일간지'],
+  [2022,'11','보도자료','최영주','간이식 8천례 달성','LTS','일간지헬스'],
+  [2022,'11','특집기사','최영주','내일신문 특집 연구원','임상시험센터/의공학','내일신문'],
+  [2022,'12','보도자료','최영주','진정효과 약물 주입 고품질 생체현미경 영상','의공학연구소/ANS','전문지'],
+  [2022,'12','보도자료','최영주','배우 강석우씨 2천만원 기부','대외협력실','일간지'],
+  [2023,'1','방송','이다예/전영은','EBS명의 부정맥','CV','EBS'],
+  [2023,'1','보도자료','이다예','3D프린팅 작업장 유해물질 농도차 연구','',''],
+  [2023,'1','보도자료','이다예','심장병원 TAVI 연300례 돌파','심장병원',''],
+  [2023,'1','방송','이다예','KBS생로병사의비밀 심장판막질환','CV/CS','KBS'],
+  [2023,'1','방송','이다예','KBS아침마당 역류성식도염','GI','KBS'],
+  [2023,'1','방송','이다예','YTN뉴스 인공각막','OPH','YTN'],
+  [2023,'1','취재지원','이다예','식도암 관련 면역항암제','ONC','한국경제'],
+  [2023,'1','취재지원','이다예','헬스조선 아미랑 카우덴증후군 환자','PSY','헬스조선'],
+  [2023,'1','취재지원','이다예','칼럼 느리게 나이드는 법','GIM','한국일보'],
+  [2023,'1','특집기사','이다예','문화일보 폐암센터','RO','문화일보'],
+  [2023,'1','기타','이다예','인명록 업데이트','전체','의학신문'],
+  [2023,'1','방송','이다예','KBS아침마당 역류성식도염','GI','KBS'],
+  [2023,'2','취재지원','이다예','승모판막 성형술 인터뷰 지원','CV','헬스조선'],
+  [2023,'2','취재지원','이다예','쿠키뉴스 멀미','ENT','쿠키뉴스'],
+  [2023,'3','취재지원','이다예','월간중앙 박승정교수님 인터뷰','CV','월간중앙'],
+  [2023,'3','도움말자료','이다예/김준호','새학기 교우관계 아이 공격성과 기분변화','PPS',''],
+  [2023,'12','취재지원','이다예','울산대학교 타임캡슐 100년 간호사 인터뷰','',''],
+  [2023,'1','보도자료','최영주','뉴스위크 2023 세계 최고 병원 세계 29위','','일간지'],
+  [2023,'3','보도자료','최영주','골수 기증자 NK세포 투여 백혈병','HEM','일간지'],
+  [2023,'3','보도자료','최영주','라만분광 인공지능 신장손상 진단기술','의공학연구소','전문지'],
+  [2023,'4','칼럼','최영주','아시아경제 건강칼럼 소아청소년 ADHD','PPS','아시아경제'],
+  [2023,'4','해외홍보','최영주','펄스 기획기사 1회차 CAR T 치료','PHO','매일경제 펄스'],
+  [2023,'5','보도자료','최영주','JYP 소아청소년 환자 위해 2억 후원','대외협력팀','전문지'],
+  [2023,'5','보도자료','최영주','코스타리카 생체 간이식 성공','LTS','일간지'],
+  [2023,'5','보도자료','최영주','근육 적은 비만 환자 근지방종 위험','END/HM','일간지'],
+  [2023,'5','보도자료','최영주','미디어 속 자해 청소년에게 전염된다','PPS/융합의학과','일간지'],
+  [2023,'6','보도자료','최영주','뉴스위크 2023 아태 최고 병원','','전문지'],
+  [2023,'6','칼럼','최영주','아시아경제 건강칼럼 성인 ADHD','PPS','아시아경제'],
+  [2023,'7','보도자료','최영주','청신경 상태로 소아 인공와우 이식 결과 예측','ENT','일간지'],
+  [2023,'8','방송','최영주','KBS무엇이든물어보세요 노년건강 귀가 좌우한다','ENT','KBS'],
+  [2023,'9','보도자료','최영주','뉴스위크 2024 분야별 세계 최고 병원','','일간지'],
+  [2023,'9','방송','최영주','KBS 생로병사 크론병','GI/CRS','KBS'],
+  [2023,'10','해외홍보','최영주','펄스 기획기사 4회차 암병원','암병원','매일경제 펄스'],
+  [2023,'11','방송','최영주','KBS 생로병사 B형간염','GI','KBS'],
+  [2023,'11','방송','최영주','YTN 뉴스 B형간염 치료','GI','YTN'],
+  [2023,'11','보도자료','최영주','B형간염 치료 개시 바이러스 수치 기준','GI','방송/일간지'],
+  [2023,'11','특집기사','최영주','매경헬스 특집기사 인공와우 이식','ENT','매일경제'],
+  [2023,'12','보도자료','최영주','대한이식학회 신임 이사장','LTS','일간지'],
+  [2023,'12','보도자료','최영주','박진영 2억 후원','대외협력팀','전문지'],
+  [2023,'1','보도자료','전영은','정신건강증진 프로그램 토닥 개발','HM','전문지'],
+  [2023,'1','취재지원','전영은','국민일보 섬망','PSY','국민일보'],
+  [2023,'1','방송','오혜성/전영은','KBS 무엇이든 물어보세요 부정맥','CV','KBS'],
+  [2023,'2','보도자료','전영은','대한민국의학한림원 정회원 선출','OPH/RO','일간지헬스'],
+  [2023,'2','보도자료','전영은','구강건강과 노쇠 연관성 분석','GIM',''],
+  [2023,'2','취재지원','전영은','머니S 인터뷰','CS',''],
+  [2023,'3','방송','전영은','KBS생로병사 소혈관질환','NR/OPH','KBS'],
+  [2023,'3','방송','전영은','KBS생로병사 이상지질혈증','CV','KBS'],
+  [2023,'3','취재지원','전영은','KBS 뉴스 B형간염 치료제 관련','GI','KBS'],
+  [2023,'4','보도자료','전영은','김기훈 교수 한국간담췌외과학회 이사장','LTS',''],
+  [2023,'4','보도자료','전영은','TCTAP 2023 개최','CV',''],
+  [2023,'5','보도자료','전영은','60대 노쇠 여부가 10년 뒤 건강 상태 예측','GIM',''],
+  [2023,'5','취재지원','전영은','희귀질환 극복의 날 인터뷰','MG',''],
+  [2023,'6','보도자료','전영은','UAE아산소화기병원 운영계약체결','',''],
+  [2023,'6','방송','전영은','SBS 후원방송 희망TV','PHO','SBS'],
+  [2023,'6','보도자료','전영은','나이에 따라 최적 심장판막치환술 달라져','CS/CV','전매체'],
+  [2023,'7','보도자료','전영은','소아 ERCP 1000례','PGN',''],
+  [2023,'8','보도자료','전영은','FES PET 검사법 국제 가이드라인','NM','일간지'],
+  [2023,'8','보도자료','전영은','중심성 망막질환 새로운 진단법','OPH','전매체'],
+  [2023,'9','방송','전영은','KBS 재난방송 노인 교통사고 취약','GIM','KBS'],
+  [2023,'10','방송','전영은','KBS 다큐인사이드 고 주석중 교수','','KBS'],
+  [2023,'11','방송','전영은','EBS 명의 파킨슨','NS','EBS'],
+  [2023,'11','보도자료','전영은','제8회 COMPLEX PCI 국제학회','CV','전문지'],
+  [2023,'11','보도자료','전영은','국내 최초 로봇 PCI 성공','CV',''],
+  [2023,'11','특집기사','전영은','심장병원 특집','CV','파이낸셜'],
+  [2023,'12','방송','전영은','EBS 명의 췌장','GI','EBS'],
+  [2023,'12','보도자료','전영은','키르기스스탄 해외환자 초청진료','PS',''],
+  [2023,'2','방송','오혜성','KBS 아침마당 백내장','OPH','KBS'],
+  [2023,'3','방송','오혜성','KBS 아침마당 바르게 걷기','OS','KBS'],
+  [2023,'4','방송','오혜성','KBS 아침마당 노년 허리 건강','RM','KBS'],
+  [2023,'4','취재지원','오혜성','현대자동차 착용 로봇 재활치료 협력','RM',''],
+  [2023,'5','취재지원','오혜성','직접 만든 옷으로 사랑 전하는 간호사','NICU','조선일보'],
+  [2023,'5','취재지원','오혜성','배우 이병헌 1억 후원','대외협력팀',''],
+  [2023,'5','보도자료','오혜성','정확한 삼킴 곤란 진단 고해상도내압검사','GI/의공학','일간지헬스'],
+  [2023,'5','보도자료','오혜성','아시아 최초 천골 질고정술 400례','OBY',''],
+  [2023,'6','취재지원','오혜성','삼킴 곤란 진단 고해상도내압검사','GI/의공학','메디포뉴스'],
+  [2023,'7','방송','오혜성','고령층의 온열질환 예방','GIM','MBC'],
+  [2023,'7','방송','오혜성','KBS아침마당 여름철 눈병','OPH','KBS'],
+  [2023,'8','방송','오혜성','KBS아침마당 알레르기 비염 백내장','ALG/OPH','KBS'],
+  [2023,'8','방송','오혜성','KBS무엇이든물어보세요 여름철 호흡기질환','ALG','KBS'],
+  [2023,'10','방송','오혜성','KBS 아침마당 녹내장','OPH','KBS'],
+  [2023,'10','취재지원','오혜성','테라노스틱스센터장 인터뷰','핵의학과','의약뉴스'],
+  [2023,'11','방송','오혜성','9층 시사국 슬기로운 의사 정원','PER','KBS'],
+  [2023,'1','취재지원','민경준','메디컬인사이드 만성기침','ALG','서울경제'],
+  [2023,'1','방송','민경준','KBS생로병사의비밀 희귀질환','MG/OS','KBS'],
+  [2023,'2','방송','민경준','EBS나눔0700','PNR/NS','EBS'],
+  [2023,'2','보도자료','민경준','아산재단 장학증서 수여식','아산재단',''],
+  [2023,'3','방송','민경준','KBS생로병사의비밀 당뇨','OPH','KBS'],
+  [2023,'3','방송','민경준','YTN 뉴스 가속노화','GIM','YTN'],
+  [2023,'4','방송','민경준','KBS2 통합뉴스룸ET 노년내과 정희원 교수','GIM','KBS'],
+  [2023,'5','방송','민경준','KBS생로병사의비밀 교수들의 건강법','BR','KBS'],
+  [2023,'7','방송','민경준','MBC 뉴스 신경섬유종 치료제 급여화','의학유전학센터','MBC'],
+  [2023,'7','방송','민경준','TVN 유퀴즈온더블록 노년내과 정희원 교수','GIM','TVN'],
+  [2023,'8','방송','민경준','KBS추적60분 소아 의료','PHO','KBS'],
+  [2023,'10','방송','민경준','KBS생로병사의비밀 담석','GI/HBP/ONC','KBS'],
+  [2023,'11','방송','민경준','KBS무엇이든물어보세요 췌장암','GI','KBS'],
+  [2023,'1','보도자료','오혜성','세나클소프트 디지털헬스케어 업무 협력','','전문지'],
+  [2024,'1','보도자료','최영주','난청으로 인공와우 이식 어린이 성장 후 일반인과 유사','ENT','일간지'],
+  [2024,'1','보도자료','최영주','프로 골퍼 함정우 소아암 환아 2천만 원 후원','대외협력팀','전문지/인터넷'],
+  [2024,'1','보도자료','최영주','뉴스룸 병원 소개 업데이트','','뉴스룸'],
+  [2024,'1','보도자료','전영은','LVAD 100례','CV',''],
+  [2024,'1','보도자료','전영은','노인위암환자 수술 위험요인 분석','ST',''],
+  [2024,'1','방송','민경준','KBS생로병사의비밀 노인 건강','GIM','KBS'],
+  [2024,'1','방송','민경준','KBS아침마당 허리디스크와 척추관협착증','RM','KBS'],
+  [2024,'1','방송','민경준','KBS아침마당 가속노화','GIM','KBS'],
+  [2024,'1','방송','민경준','KBS생로병사의비밀 만성통증','ANS','KBS'],
+  [2024,'1','취재지원','이다예/전영은','한국경제 명의인터뷰 박덕우 교수','CV','한국경제'],
+  [2024,'1','취재지원','오혜성','유방암 극복하고 자녀 5명 출산','BR','조선일보'],
+  [2024,'1','취재지원','오혜성','시뮬레이션센터 전공의 교육 관련','시뮬레이션센터','메디칼업저버'],
+  [2024,'2','보도자료','최영주','서울아산병원 ESG 경영 지속 확대','','일간지'],
+  [2024,'2','보도자료','전영은','혈관 세포 매커니즘 규명','OPH',''],
+  [2024,'2','보도자료','전영은','스탠포드대학교서 강의','CS',''],
+  [2024,'2','보도자료','오혜성','국내 최초로 UAE EHS와 MOU 체결','국제사업실','일간지헬스'],
+  [2024,'2','방송','민경준','KBS생로병사 폐동맥 고혈압','CV(PHT)','KBS'],
+  [2024,'2','방송','민경준','KBS아침마당 가속노화','GIM','KBS'],
+  [2024,'3','보도자료','최영주','뉴스위크 2024 세계 최고 병원 국내 1위 세계 22위','서울아산병원','일간지'],
+  [2024,'3','보도자료','최영주','국제간외과학회 싱글토픽 심포지엄 개최','LTS','일간지헬스'],
+  [2024,'3','보도자료','전영은','탑콘안과학술상 수상','OPH','일간지헬스'],
+  [2024,'3','보도자료','전영은','죽상경화증 환자 예방적 관상동맥중재술 효과','CV',''],
+  [2024,'3','보도자료','민경준','아산의학상 시상식','아산재단',''],
+  [2024,'3','방송','전영은','KBS 뉴스 섬망','GIM','KBS'],
+  [2024,'3','방송','민경준','KBS생로병사 900회 특집','GIM','KBS'],
+  [2024,'4','보도자료','최영주','장기이식으로 2만 5천 명에게 새 삶','장기이식센터','일간지'],
+  [2024,'4','방송','이다예','MBC특집다큐멘터리 푸바오','','MBC'],
+  [2024,'4','방송','전영은','EBS 명의 심근경색 재편집','CV','EBS'],
+  [2024,'4','방송','민경준','KBS생로병사의비밀 가속노화','GIM','KBS'],
+  [2024,'4','방송','민경준','KBS생로병사의비밀 희귀질환','MG/OBY','KBS'],
+  [2024,'5','보도자료','최영주','초고도비만 여성 단일공 로봇 자궁절제','OBY','일간지헬스'],
+  [2024,'5','보도자료','최영주','세포내 산화철 나노입자 분해와 세포사멸','융합의학과','전문지'],
+  [2024,'5','보도자료','전영은','심부전 판막합병증 새로운 약물치료 효과','CV',''],
+  [2024,'5','보도자료','전영은','난소 자궁내막종 경화술 치료효과 분석','DR',''],
+  [2024,'6','보도자료','최영주','서울아산병원 인공지능 재생의료 화생방 재난 대응','세포치료센터','전문지'],
+  [2024,'6','보도자료','최영주','혈관육종암 환자 특성 재현한 오가노이드 개발','PS/의공학','일간지'],
+  [2024,'6','보도자료','이다예','완전내시경심장수술 500례','CS','일간지헬스'],
+  [2024,'6','보도자료','이다예','신간 모든 아이는 예민하다','PSY',''],
+  [2024,'6','방송','전영은','EBS 귀하신몸 근감소증','GIM','EBS'],
+  [2024,'7','보도자료','최영주','심장내과 의료진 부정맥학회 수상','CV','전문지'],
+  [2024,'7','보도자료','최영주','태아치료센터 태아내시경 시술 300례','태아치료센터','일간지'],
+  [2024,'7','보도자료','이다예','3D프린팅 의료 활용 보도자료','융합의학과',''],
+  [2024,'7','보도자료','전영은','유명인의 공황장애 공개와 유병률 상관관계','PSY','일간지'],
+  [2024,'8','보도자료','최영주','신장이식 환자 피 한 방울로 거부반응 조기진단','의공학연구소/KT','일간지'],
+  [2024,'8','보도자료','최영주','갑상선 혹 고주파절제 10년 추적 효과 안전성','DR','일간지'],
+  [2024,'8','보도자료','최영주','인공와우 이식 후 뇌 청각 중추 회복 세계 첫 확인','ENT','일간지'],
+  [2024,'8','보도자료','최영주','심폐소생술 중 에크모 조기 치료 중요성','ANS','일간지헬스'],
+  [2024,'8','보도자료','이다예','흉부외과 다빈치로봇 국내 첫 기관절제술 및 재건술','CS/PLM','일간지헬스'],
+  [2024,'8','보도자료','이다예','일차중추신경계 림프종 PET검사 유용성','ONC',''],
+  [2024,'9','보도자료','최영주','뉴스위크 2025 임상분야별 세계 최고 병원','서울아산병원','일간지'],
+  [2024,'9','보도자료','전영은','NEJM 심방세동 관상동맥질환 최적 약물치료','CV','일간지'],
+  [2024,'9','보도자료','전영은','글로벌 의료 인공지능 대회 2년 연속 수상','ANS',''],
+  [2024,'9','보도자료','민경준','아산상 수상자 선정 발표','아산재단',''],
+  [2024,'10','보도자료','최영주','B형간염 치료기준 바꾸면 간암 발생 4만 명 예방','GI','일간지'],
+  [2024,'10','보도자료','최영주','당뇨병 따라오는 배뇨장애 줄기세포 치료 가능성','URO','전문지'],
+  [2024,'10','보도자료','전영은','TAVI 2000례','CV',''],
+  [2024,'11','보도자료','최영주','인도네시아 화산 피해지역 사랑의 의술','사회복지팀','일간지헬스'],
+  [2024,'11','보도자료','전영은','COMPLEX PCI 2024 개최','CV','전문지'],
+  [2024,'12','보도자료','최영주','세계 소아 소화기간영양학회 공로상','PGN','일간지헬스'],
+  [2024,'12','보도자료','최영주','국내 첫 생체 간이식 주인공 30주년','PGN/LTS','일간지'],
+  [2024,'12','보도자료','이다예','미숙아 치료 성과 총정리','신생아과',''],
+  [2024,'12','보도자료','전영은','AI 기반 관상동맥중재시술 효과 분석','CV',''],
+  [2025,'1','방송','전영은','EBS 명의 저속노화','GIM','EBS'],
+  [2025,'1','보도자료','전영은','의료기관에서 상용 LLM 사용 안전성 검증','CV/빅데이터',''],
+  [2025,'1','보도자료','전영은','심방세동 치료 펄스장 절제술 도입','CV','일간지헬스'],
+  [2025,'1','취재지원','전영은','NEJM 게재 성과 인터뷰','CV','매일경제'],
+  [2025,'1','취재지원','전영은','고혈압 폐동맥고혈압 인터뷰','CV','서울경제'],
+  [2025,'2','방송','전영은','KBS 생로병사 비알코올성 지방간','LTS','KBS'],
+  [2025,'2','방송','전영은','SBS뉴스 의정갈등 1년','호흡기내과','SBS'],
+  [2025,'2','취재지원','전영은','의정갈등 전후 수술 건수 비교','ST','연합뉴스'],
+  [2025,'3','방송','박준규/전영은','KBS 생로병사의 비밀 부정맥','CV','KBS'],
+  [2025,'3','취재지원','전영은','복강경 도너 수술 인터뷰','LTS','중앙헬스'],
+  [2025,'3','취재지원','전영은','바이탈 닥터 심장이식','CS','문화일보'],
+  [2025,'3','취재지원','전영은','연명의료 기획기사','PLM','한국일보'],
+  [2025,'4','보도자료','전영은','TCTAP 2025 개최 30주년','CV',''],
+  [2025,'5','방송','전영은','KBS 뉴스 건강하십니까 청년층 고혈압','CV','KBS'],
+  [2025,'5','방송','전영은','EBS 나눔0700','POS','EBS'],
+  [2025,'6','방송','전영은','EBS 명의 폐결핵','PLM','EBS'],
+  [2025,'7','방송','전영은','EBS 나눔0700','PHO','EBS'],
+  [2025,'7','보도자료','전영은','리얼스토리 35번째 스토리 기부','PHO','일간지'],
+  [2025,'7','보도자료','전영은','SEOUL VALVES 2025 학회 개최','CV',''],
+  [2025,'8','방송','전영은','EBS 명의 경동맥','VAS','EBS'],
+  [2025,'8','방송','전영은','KBS 생로병사 실신','NR','KBS'],
+  [2025,'9','보도자료','전영은','방탄소년단 RM 1억원 후원','',''],
+  [2025,'10','보도자료','전영은','젊은 암 심포지엄 크루 창단식','',''],
+  [2025,'11','보도자료','전영은','COMPLEX PCI 2025 개최','CV','전문지'],
+  [2025,'12','방송','전영은','KBS 생로병사 비만','END','KBS'],
+  [2025,'2','보도자료','박준규','소변 검사만으로 방광암 조기 진단','URO',''],
+  [2025,'2','보도자료','박준규','선천성 횡격막 탈장 에크모 치료','NB',''],
+  [2025,'2','보도자료','박준규','최종우 교수 대한컴퓨터가상수술학 회장','PS',''],
+  [2025,'2','보도자료','박준규','코로나19 팬데믹 기간 중이염 수술 40% 감소','ENT',''],
+  [2025,'2','취재지원','박준규','손목 터널 증후군 관련 자료','OS','서울신문'],
+  [2025,'2','취재지원','박준규','비만 관련 자료','FM','서울신문'],
+  [2025,'3','보도자료','박준규','근육량 적고 내장지방 많으면 폐기능 저하 최대 4배','HM',''],
+  [2025,'3','보도자료','박준규','제18회 아산의학상 시상식','',''],
+  [2025,'3','취재지원','박준규','미세먼지 관련 자료','PLM','서울신문'],
+  [2025,'3','취재지원','박준규','양악수술 관련 인터뷰','DNT','헬스조선'],
+  [2025,'3','취재지원','박준규','베스트 닥터의 베스트 건강법 수면무호흡증','ENT','동아일보'],
+  [2025,'4','보도자료','박준규','식도암 치료 효과 높인 국소 광역학치료용 카테터','',''],
+  [2025,'4','보도자료','박준규','의료진 환자 간 대화 요약하는 AI 음성인식 시스템 도입','',''],
+  [2025,'4','보도자료','박준규','양악수술 후 결과 미리 보여주는 AI 영상 생성','',''],
+  [2025,'4','취재지원','박준규','알레르기 비염 결막염','ALG/OPH','서울신문'],
+  [2025,'4','취재지원','박준규','CAR-T 치료 리얼스토리 후속 취재','PHO','세계일보'],
+  [2025,'5','보도자료','박준규','꾸준한 운동이 심장병 재발 위험 13% 낮춰','VAS',''],
+  [2025,'5','보도자료','박준규','심정지 후 회복한 10명 중 4명 재입원','ER',''],
+  [2025,'5','보도자료','박준규','CAR-T 치료제 관련 국책과제 선정','ONC',''],
+  [2025,'5','방송','박준규','KBS 동행 망막혈관폐쇄 환자','OPH','KBS'],
+  [2025,'5','방송','박준규','KBS 무엇이든 물어보세요 환절기 피부질환','DER','KBS'],
+  [2025,'5','취재지원','박준규','식중독 남성 갱년기 도움말 자료','INF/HM','서울신문'],
+  [2025,'5','취재지원','박준규','여름철 불청객 요로결석','URO','서울신문'],
+  [2025,'6','취재지원','박준규','궤양성 대장염 관련 노년환자 치료','GI','메디칼업저버'],
+  [2025,'6','방송','박준규','기부온 나누면 행복 특집방송','PPA','MBC에브리원'],
+  [2025,'7','보도자료','박준규','AI 활용해 파킨슨병 환자 뇌영상 분석','융합의학과','헬스/전문지'],
+  [2025,'7','보도자료','박준규','신간안내 오늘도 간호사입니다','간호부',''],
+  [2025,'7','방송','박준규','KBS 생로병사의 비밀 미세먼지의 위험성','PLM','KBS'],
+  [2025,'7','취재지원','박준규','파워K-우먼 원혜성 교수 인터뷰','OBY','아시아경제'],
+  [2025,'8','보도자료','박준규','신간 안내 우리 아이 사회성 키우기','소아정신건강의학과',''],
+  [2025,'8','방송','박준규','KBS 생로병사의 비밀 거북목 목디스크','OS','KBS'],
+  [2025,'9','보도자료','박준규','제37회 아산상 수상자 발표','',''],
+  [2025,'9','보도자료','박준규','소화기내시경센터 WEO 최우수센터 지정','GI',''],
+  [2025,'9','취재지원','박준규','베스트 닥터의 베스트 건강법 사회성 키우기','PSY','동아일보'],
+  [2025,'10','보도자료','박준규','일본 QST 병원과 중입자 치료 업무협약','',''],
+  [2025,'11','보도자료','박준규','의료AI 보건의료인 직무교육사업','',''],
+  [2025,'11','보도자료','박준규','아산재단 제37회 아산상 시상식','아산재단',''],
+  [2025,'11','취재지원','박준규','겨울철 피부건조증 관리법','DER','서울신문'],
+  [2025,'11','취재지원','박준규','환절기 심혈관 뇌 호흡기 건강관리','','서울신문'],
+  [2025,'11','취재지원','박준규','수험생 긴장 관리법','PSY','헬스중앙'],
+  [2025,'12','보도자료','박준규','식도암 국소치료 카테터 기술 개발','GI',''],
+  [2025,'12','보도자료','박준규','심장이소증 환아 박서린','PCD',''],
+  [2025,'12','취재지원','박준규','베스트 닥터의 베스트 건강법 젊은 부인암','OBY','동아일보'],
+  [2025,'2','보도자료','최영주','뉴스위크 2025 세계 최고 병원 세계 25위','서울아산병원','일간지'],
+  [2025,'2','보도자료','최영주','방탄소년단 제이홉 어린이병원 2억 후원','','일간지'],
+  [2025,'2','보도자료','최영주','순수 복강경 기증자 간절제 안전성 입증','LTS','일간지'],
+  [2025,'3','보도자료','최영주','한국이 전수한 간이식 몽골 300명 생명 살려','LTS','일간지'],
+  [2025,'3','보도자료','최영주','만성 B형간염 조기 치료해야 간암 위험 줄어','GI','일간지'],
+  [2025,'4','보도자료','최영주','미네소타대학교 의과대학 협약 갱신','','일간지'],
+  [2025,'4','보도자료','최영주','중입자치료기 도입','','일간지/외신'],
+  [2025,'4','방송','최영주/오혜성','MBN 뉴스 무조건 살린다 소아중환자실','PICU','MBN'],
+  [2025,'4','취재지원','최영주','tv조선 뉴스 안과골절 3D 재건','OPH','tv조선'],
+  [2025,'4','취재지원','최영주','KBS 인간극장 시각장애인 초보 아빠의 육아일기','','KBS'],
+  [2025,'5','보도자료','최영주','세계 첫 간이식 9천례','LTS','일간지'],
+  [2025,'5','보도자료','최영주','방탄소년단 진 1억원 후원','대외협력팀','일간지/연예부'],
+  [2025,'5','보도자료','최영주','장초음파 국제인증 2종 국내 첫 획득','GI','일간지'],
+  [2025,'5','특집기사','최영주','헬스경향 암병원 특집','암병원','헬스경향'],
+  [2025,'5','해외홍보','최영주','뉴스위크 2025 아태 최고 병원','',''],
+  [2025,'6','방송','최영주','TV조선 우리 아기가 태어났어요','OBY','TV조선'],
+  [2025,'6','보도자료','최영주','中 명문 칭화대 초청 받아 생체 간이식 집도','LTS','일간지'],
+  [2025,'6','보도자료','최영주','사호석 교수 중국 대련의과대학 초빙교수','OPH','일간지헬스'],
+  [2025,'6','보도자료','최영주','신장 7배 커진 다낭성 신증후군 로봇 신장이식 아시아 첫 성공','KT','일간지'],
+  [2025,'7','방송','최영주','CTS 후원방송 예수사랑여기에','LTS','CTS'],
+  [2025,'7','방송','최영주/윤주은','KBS 생로병사 실명을 유발하는 안질환','OPH','KBS'],
+  [2025,'7','보도자료','최영주','초고해상도 영상 기술로 미토콘드리아 움직임 실시간 관찰','융합의학과','일간지헬스'],
+  [2025,'7','해외홍보','최영주','스태티스타 컨설팅 옵션 보고서','','원내'],
+  [2025,'8','방송','최영주','KBS 생로병사의 비밀 불면증','URO','KBS'],
+  [2025,'8','방송','최영주','SBS 뉴스 코셀루고 약물 삭감','의학유전학센터','SBS'],
+  [2025,'8','방송','최영주','MBN 뉴스 소나무','ONC','MBN'],
+  [2025,'8','보도자료','최영주','서울아산병원 희귀질환자 진단 방랑 막는 다학제 진단 모델','MG','일간지'],
+  [2025,'9','보도자료','최영주','뉴스위크 2026 임상분야별 세계 최고 병원','서울아산병원','일간지'],
+  [2025,'9','방송','최영주','KBS 후원방송 동행','NR','KBS'],
+  [2025,'10','방송','최영주','KBS 생로병사 전립선암 맞춤 치료','NM/ONC','KBS'],
+  [2025,'10','방송','최영주','SBS 뉴스 IKBKG G6PD 유전자 결손','MG','SBS'],
+  [2025,'10','방송','최영주','KBS 후원방송 동행 폐이식 대기 환자','PLM','KBS'],
+  [2025,'11','보도자료','최영주','슈퍼주니어 김희철 1억원 후원','대외협력팀','일간지'],
+  [2025,'11','보도자료','최영주','서울아산병원 난치성 면역질환 줄기세포 기술 이전','세포유전공학교실','전문지'],
+  [2025,'11','보도자료','최영주','눈 망막 혈관 밀도 낮을수록 심혈관질환 위험','OPH/CV/DR','일간지'],
+  [2025,'11','방송','최영주','YTN 사이언스 뉴스 눈 망막','OPH/CV','YTN사이언스'],
+  [2025,'11','방송','최영주','tv조선 후원방송 나누는 행복','','tv조선'],
+  [2025,'11','취재지원','최영주','매일경제 창간 기념 인터뷰 명의 10인','서울아산병원','매일경제'],
+  [2025,'12','보도자료','최영주','건강정보 고속도로 사업 본격 시행','데이터융합팀','일간지'],
+  [2025,'12','보도자료','최영주','서울아산병원 말기 폐부전 환자 300명 폐이식','폐이식팀','일간지'],
+  [2025,'12','보도자료','최영주','신경섬유종 1형에 약물 아탈루렌 치료 가능성','MG','일간지'],
+  [2025,'12','방송','최영주','KBS 생로병사의 비밀 소아를 치료하는 의사','SP/NEO','KBS'],
+  [2025,'12','방송','최영주','mbc 특집 후원방송 W 소아 신장질환','NEP','MBC'],
+  [2025,'1','방송','이다예','YTN사이언스 에이비아 촬영','의공학연구소','YTN사이언스'],
+  [2025,'1','방송','이다예','MBN 후원방송 소나무 소아신경과','소아신경과','MBN'],
+  [2025,'1','보도자료','이다예','김효원 교수님 책 출간','PPS',''],
+  [2025,'2','취재지원','이다예','김효원교수님 신간 인터뷰 한국일보','PPS','한국일보'],
+  [2025,'2','취재지원','이다예','김효원교수님 신간 인터뷰 경향신문','PPS','경향신문'],
+  [2025,'2','취재지원','이다예','서울경제 건강면 낙상','노년내과/재활의학과','서울경제'],
+  [2025,'2','취재지원','이다예','하이닥 레켐비 관련 취재요청','신경과','하이닥'],
+  [2025,'3','보도자료','이다예','의사직 보직발령 인사','','일간지헬스'],
+  [2025,'3','보도자료','이다예','머신러닝 기반 주술기 통증 정량적 평가','융합의학과',''],
+  [2025,'3','취재지원','이다예','노인성 폐렴 관련','호흡기내과','조선일보'],
+  [2025,'3','취재지원','이다예','만성신부전과 소염진통제','신장내과','시사저널'],
+  [2025,'3','도움말자료','이다예','새학기 도움말자료','PPS',''],
+  [2025,'1','취재지원','오혜성','병원인 새해 소망','진료협력팀','병원신문'],
+  [2025,'1','취재지원','오혜성','글로벌명의 인터뷰','DR','주간조선'],
+  [2025,'1','취재지원','오혜성','대한통증학회장 인터뷰','ANS','한국일보'],
+  [2025,'2','방송','오혜성','아침마당 건강한 생활습관','RM','KBS'],
+  [2025,'2','취재지원','오혜성','명의를 만나다 난소자궁암센터소장','OBY','한국경제'],
+  [2025,'3','방송','오혜성','KBS 더 보다 의정갈등 1주년','PLM','KBS'],
+  [2025,'3','취재지원','오혜성','희귀질환의 날 기념','MG','서울경제'],
+  [2025,'3','취재지원','오혜성','초로기 치매','NR','뉴스1'],
+  [2025,'4','취재지원','오혜성','매운 음식과 위장 질환','GI','내일신문'],
+  [2025,'4','취재지원','오혜성','쯔쯔가무시병','INF','세계일보'],
+  [2025,'5','취재지원','오혜성','전립선암 서면 인터뷰','URO','매일경제'],
+  [2025,'5','취재지원','오혜성','이상지질혈증 서면 인터뷰','CV','서울경제'],
+  [2025,'5','취재지원','오혜성','통합진료플랫폼 VCB 치료 사례','','한국경제'],
+  [2025,'5','취재지원','오혜성','의료관광 기획기사 VCB','국제진료센터','서울경제'],
+  [2025,'6','취재지원','오혜성','여름철 온열질환','FM','조선일보'],
+  [2025,'6','취재지원','오혜성','몽골 간이식 환자 사례','LTS','조선일보'],
+  [2025,'6','취재지원','오혜성','알코올성 간질환자의 간이식','LTS','국민일보'],
+  [2025,'6','취재지원','오혜성','소아중환자실 현황','PCC','문화일보'],
+  [2025,'7','칼럼','오혜성','백세시대 여름철 건강관리','GIM','한국일보'],
+  [2025,'8','칼럼','오혜성','백세시대 안전하게 즐기는 야외활동','GIM','한국일보'],
+  [2025,'9','칼럼','오혜성','백세시대 혈당 스파이크 과도한 공포가 만든 함정','GIM','한국일보'],
+  [2025,'10','칼럼','오혜성','백세시대 집에 가고 싶어도 퇴원 망설이는 노인들','GIM','한국일보'],
+  [2025,'11','칼럼','오혜성','백세시대 노년기 백신 올해 무엇을 맞아야 할까','GIM','한국일보'],
+  [2025,'12','칼럼','오혜성','백세시대 알츠하이머병 치료제 시대의 치매 예방','GIM','한국일보'],
+  [2025,'12','취재지원','오혜성','아델 사노피에 알츠하이머 신약 기술 수출','뇌과학교실','매일경제'],
+  [2025,'1','보도자료','윤주은','진료협력병원 간담회','',''],
+  [2025,'4','도움말자료','윤주은','봄철 찾아오는 미세먼지와 심장 관리','CV','일간지'],
+  [2025,'4','취재지원','윤주은','백내장 수술 후 인공수정체 탈구','OPH','국민일보'],
+  [2025,'5','도움말자료','윤주은','가정의 달 5월 캠핑 안전하게 즐기기','DER/OS/INF','일간지'],
+  [2025,'5','보도자료','윤주은','염증성장질환과 비만 상관관계 연구','GI','일간지'],
+  [2025,'5','보도자료','윤주은','필리핀 현지 생체 간이식 집도','LTS','일간지'],
+  [2025,'5','취재지원','윤주은','여름철 피부질환','DER','헬스경향'],
+  [2025,'5','취재지원','윤주은','치매','NR','세계일보'],
+  [2025,'5','취재지원','윤주은','심혈관질환','CV','세계일보'],
+  [2025,'5','취재지원','윤주은','여름철 뇌졸중','NR','헬스경향'],
+  [2025,'7','보도자료','윤주은','염증성장질환과 비만 상관관계 연구 배포','GI','일간지'],
+  [2025,'7','보도자료','윤주은','필리핀 현지 생체 간이식 집도 배포','LTS','일간지'],
+  [2025,'8','보도자료','윤주은','노년환자 통합돌봄 프로그램 WithONE','',''],
+  [2025,'8','취재지원','윤주은','염증성 장질환 비만율','GI','YTN'],
+  [2025,'9','보도자료','윤주은','노인을 위한 급성기 치료 위험 점수 머신러닝 기반 도구','GIM',''],
+  [2025,'9','보도자료','윤주은','신간출간 얼굴의 인문학','DNT','일간지/문화'],
+  [2025,'10','보도자료','윤주은','사호석 교수 아시아태평양안과학회 공로상','OPH','일간지헬스'],
+  [2025,'10','기타','윤주은','2025 매경시니어페스타 위드원 부스','통합돌봄지원팀',''],
+  [2025,'11','보도자료','윤주은','낙상대응팀 신설','진료지원팀','일간지'],
+  [2025,'12','보도자료','윤주은','재발률 높은 난소암 혈액 검사로 치료 효과 예측','OBY','일간지'],
+  [2025,'12','보도자료','윤주은','송우정 교수 만성기침국제전문가위원회 의장 선임','ALG','일간지'],
+  // 2026년
+  [2026,'1','보도자료','박준규','아산의학상 수상자 발표','아산재단','일간지'],
+  [2026,'1','보도자료','박준규','아시아 염증성 장질환 경화성 담관염','GI',''],
+  [2026,'1','취재지원','박준규','번아웃 증후군 도움말 자료','건강의학과','서울신문'],
+  [2026,'1','취재지원','박준규','불면증 관련 도움말 자료','PSY','서울신문'],
+  [2026,'1','취재지원','박준규','AI 진료 음성인식 시스템','','뉴시스'],
+  [2026,'1','취재지원','박준규','진통제 복용법 부작용','약제팀','헬스중앙'],
+  [2026,'1','취재지원','박준규','대한갑상선학회 이사장 취임','BE','의료정보'],
+  [2026,'1','취재지원','박준규','비만에 따른 합병증 도움말','FM','서울신문'],
+  [2026,'1','보도자료','박준규','소아 간이식·조혈모세포이식 면역억제제 중단','소아청소년/PHO','일간지'],
+  [2026,'2','기타','박준규','의학신문 정년퇴임 교수 명단','','의학신문'],
+  [2026,'2','취재지원','박준규','설 연휴 건강관리법','FM/ER','매일경제'],
+  [2026,'2','취재지원','박준규','설 연휴 건강관리법','FM/ER','한국경제'],
+  [2026,'2','취재지원','박준규','환절기 노인 건강 관리법','CV/PLM/PSY/ENT','헬스경향'],
+  [2026,'2','방송','박준규','아침마당 파킨슨병','NR','KBS'],
+  [2026,'2','보도자료','박준규','류마티스 환자 승모판 성형술','CS',''],
+  [2026,'2','보도자료','박준규','분만 월 300건 달성','OBY',''],
+  [2026,'3','보도자료','박준규','서울아산병원-UNIST 의료 AI 업무 협약','',''],
+  [2026,'3','보도자료','박준규','이송모니터링 연 2만 4천 건 MTT','','전문지'],
+  [2026,'3','보도자료','박준규','아산재단 장학증서 수여식','아산재단','일간지'],
+  [2026,'3','보도자료','박준규','암 예방의 날 기념식 유공자 포상','','헬스'],
+  [2026,'3','보도자료','박준규','제19회 아산의학상 시상식','','일간지'],
+  [2026,'3','방송','박준규','KBS 생로병사 AI 시대 암 명의','GI','KBS'],
+  [2026,'3','취재지원','박준규','스텐트 시술 로봇 에이비아 AI 기술','의공학연구소','매일경제'],
+  [2026,'3','취재지원','박준규','KBS 유튜브 크랩 2030 녹내장','OPH','KBS유튜브'],
+  [2026,'3','취재지원','박준규','질병관리청 결핵 제로 인터뷰','PLM','질병관리청유튜브'],
+  [2026,'3','취재지원','박준규','성조숙증 관리 및 치료법','소아청소년과','서울신문'],
+  [2026,'3','특집기사','박준규','AI 빅데이터 중증질환 치료 패러다임','','파이낸셜뉴스'],
+  [2026,'4','보도자료','박준규','고령자 약물 6개월 이상 복용 골절 위험','FM','일간지'],
+  [2026,'4','보도자료','박준규','거북목 교정 경추 변형 수술 NeckCA','NS','헬스'],
+  [2026,'4','보도자료','박준규','국산 1호 심혈관 중재술 로봇 에이비아','의공학연구소','일간지'],
+  [2026,'4','보도자료','박준규','임호준 어린이병원장 존경받는 병원인상','어린이병원','전문지'],
+  [2026,'4','방송','박준규','KBS 생로병사 혈액암','ONC','KBS'],
+  [2026,'4','취재지원','박준규','에이비아 관련 최재순 교수 인터뷰','의공학연구소','머니투데이'],
+  [2026,'4','취재지원','박준규','빠정예진 EMR 기반 수술 후 예후 예측 AI','ANS','뉴시스'],
+  [2026,'4','취재지원','박준규','MBC 봄날의 기적 박서린 양 취재','소아재활의학과','MBC'],
+  [2026,'4','취재지원','박준규','에이비아 관련 인터뷰','의공학연구소','한국일보'],
+  [2026,'5','방송','박준규','KBS 생로병사 3차 신경통','NS','KBS'],
+  [2026,'5','보도자료','박준규','폐쇄망 기반 프라이빗 AI 지식 검색 시스템','',''],
+  [2026,'5','보도자료','박준규','아산재단 창립 49주년 심포지엄','',''],
+  [2026,'5','보도자료','박준규','뇌동맥류 치료 2만례','NS',''],
+  [2026,'5','특집기사','박준규','뉴스1 AI 빅데이터 중증질환','','뉴스1'],
+  [2026,'5','취재지원','박준규','어린이병원 암병동 봉사 취재','','서울신문'],
+  [2026,'5','취재지원','박준규','지방간 관련','GI','서울신문'],
+  [2026,'5','취재지원','박준규','파킨슨병 치료 줄기세포 연구','NS','뉴스1'],
+  [2026,'5','취재지원','박준규','부비동염 원인과 치료법','ENT','서울신문'],
+  [2026,'5','취재지원','박준규','유퀴즈 박근미 차승현 약사 출연','약제팀','tvn'],
+  [2026,'5','취재지원','박준규','심혈관중재술 로봇 에이비아 인터뷰','의공학연구소','한국경제'],
+  [2026,'5','취재지원','박준규','유방암 치료 후 자연임신','BR','동아일보'],
+  [2026,'1','칼럼','오혜성','백세시대 건강 정보의 홍수','GIM','한국일보'],
+  [2026,'1','칼럼','오혜성','백세시대 약이 늘수록 약해지는 순간','GIM','한국일보'],
+  [2026,'2','칼럼','오혜성','백세시대 노인 우울증','GIM','한국일보'],
+  [2026,'2','취재지원','오혜성','치매','NR','조선일보'],
+  [2026,'2','취재지원','오혜성','전립선암','URO','조선일보'],
+  [2026,'2','보도자료','오혜성','비흡연 폐암 원인 규명','PLM',''],
+  [2026,'3','칼럼','오혜성','백세시대 노인 가려움증','GIM','한국일보'],
+  [2026,'3','취재지원','오혜성','먹는 알부민의 효과','GI','중앙일보'],
+  [2026,'3','취재지원','오혜성','알라질증후군 치료제 국내 첫 건보','소아소화기영양과','서울경제'],
+  [2026,'3','방송','오혜성','MBC 뉴스 미숙아','NEO','MBC'],
+  [2026,'4','칼럼','오혜성','백세시대 보행과 건강','GIM','한국일보'],
+  [2026,'4','칼럼','오혜성','백세시대 나이 듦의 품격','GIM','한국일보'],
+  [2026,'4','취재지원','오혜성','신장암','URO','뉴스1'],
+  [2026,'4','취재지원','오혜성','K-메디컬 세계로 외국인환자 르포','LTS','매일경제'],
+  [2026,'4','취재지원','오혜성','상급종합병원의 의료 AI','AI혁신지원실','메디게이트'],
+  [2026,'4','취재지원','오혜성','로봇수술 4만례 돌파','URO','매일경제'],
+  [2026,'4','취재지원','오혜성','코로나19 후유증 인지장애 뇌 변화','INF','매일경제'],
+  [2026,'4','취재지원','오혜성','위드원 서비스','통합돌봄지원팀','중앙일보'],
+  [2026,'5','칼럼','오혜성','백세시대 삶을 그대로 받아들이기','GIM','한국일보'],
+  [2026,'5','보도자료','오혜성','서울아산병원-메드트로닉 파트너십','로봇수술센터','일간지'],
+  [2026,'5','보도자료','오혜성','뷰티 플랫폼 구다이글로벌 후원','','일간지'],
+  [2026,'5','취재지원','오혜성','탈모 관리','DER','이투데이'],
+  [2026,'5','취재지원','오혜성','통합진료플랫폼 VCB 치료 사례','','한국경제'],
+  [2026,'5','취재지원','오혜성','알코올성 간질환','LTS','서울경제'],
+  [2026,'5','취재지원','오혜성','안 종양','OPH','서울경제'],
+  [2026,'5','취재지원','오혜성','한국 의료기관 AI 도입','AI혁신지원실','서울경제'],
+  [2026,'1','보도자료','전영은','복합심장질환 환자 완전교정수술','PCS','일간지'],
+  [2026,'1','취재지원','전영은','MYHOPE 관련 환자 의료진 인터뷰','BR','중앙헬스'],
+  [2026,'2','보도자료','전영은','담도췌장센터 ERCP 15만례','','일간지헬스'],
+  [2026,'2','보도자료','전영은','3차원 심장초음파 이용 심장중격결손','CV',''],
+  [2026,'2','취재지원','전영은','홍이준 환아 추가 취재 소아심장외과','PCS','머니투데이'],
+  [2026,'3','보도자료','전영은','NEJM 3번째 논문 대동맥판막 협착증','CV','일간지'],
+  [2026,'3','보도자료','전영은','TCTAP 2026 개최','CV',''],
+  [2026,'3','특집기사','전영은','중증 외국인 환자 AI 통합진료플랫폼','국제사업실','에너지경제'],
+  [2026,'3','취재지원','전영은','중앙일보 강덕현 교수 인터뷰 NEJM','CV','중앙일보'],
+  [2026,'3','취재지원','전영은','메디컬투데이 위고비 비마그루맙','END','메디컬투데이'],
+  [2026,'4','보도자료','전영은','선천성 폐기형 에크모 보조 수술','NEO',''],
+  [2026,'4','보도자료','전영은','폐암 유발 바이오마커 검출','의과대학',''],
+  [2026,'4','보도자료','전영은','my hope 크루 해단식','BR',''],
+  [2026,'4','특집기사','전영은','데일리메디 젊은 유방암','BR','데일리메디'],
+  [2026,'4','방송','전영은','KBS 생로병사 암환자 스트레스 관리','ES','KBS'],
+  [2026,'4','취재지원','전영은','메가경제 폐암 바이오마커','의과대학','메가경제'],
+  [2026,'4','취재지원','전영은','메디컬투데이 GLP-1','END','메디컬투데이'],
+  [2026,'4','취재지원','전영은','소아 뇌종양과 두통','NS','하이닥'],
+  [2026,'5','보도자료','전영은','Outcoms Book 7개 센터 발간','암병원',''],
+  [2026,'5','방송','전영은','EBS 명의 식도질환','GI/CS','EBS'],
+  [2026,'5','방송','전영은','KBS 아침마당 천식질환','ALG','KBS'],
+  [2026,'5','취재지원','전영은','메가경제 헬리코박터 제균치료제','GI','메가경제'],
+  [2026,'5','취재지원','전영은','중앙일보 알레르기질환','ALG','중앙일보'],
+  [2026,'5','취재지원','전영은','KBR 키트루다 피하주사','ONC','KBR'],
+  [2026,'5','취재지원','전영은','코리아헬스로그 자궁경부암 명의','OBY','코리아헬스로그'],
+  [2026,'5','취재지원','전영은','소아재활로봇 밤비니 키즈 임상시험','RM',''],
+  [2026,'5','취재지원','전영은','명의를 만나다 심장병원장','CV','한국경제'],
+  [2026,'1','보도자료','최영주','상용 AI 임산부 금기약 추천','URO','일간지'],
+  [2026,'1','보도자료','최영주','췌장암 치료 좌우 섬유아세포 아형','융합의학과','전문지'],
+  [2026,'1','보도자료','최영주','난치성 천식 멜라토닌 줄기세포 치료','세포유전공학교실','전문지'],
+  [2026,'1','보도자료','최영주','희귀암 연부조직육종 오가노이드','융합의학과','전문지'],
+  [2026,'1','취재지원','최영주','명의들이 말하는 새해 건강 실천법','OBY','매일경제'],
+  [2026,'1','방송','최영주','JTBC 뉴스 의료용 LLM 보안','URO','JTBC'],
+  [2026,'1','방송','최영주','KBS 인간극장 엄마가 되고 싶어','CRA/NEO','KBS'],
+  [2026,'1','기타','최영주','뉴스위크 2026 세계 최고 병원 보고서','','원내'],
+  [2026,'2','보도자료','최영주','척추센터 개소 7개 진료과 협진','','일간지헬스'],
+  [2026,'2','보도자료','최영주','눈 뒤 종양 안와 우연종 치료 가이드','OPH','일간지헬스'],
+  [2026,'2','보도자료','최영주','프로바이오틱스 펩티도글리칸 장 염증','융합의학과','일간지헬스'],
+  [2026,'2','보도자료','최영주','방탄소년단 제이홉 어린이병원 후원','','일간지'],
+  [2026,'2','방송','최영주','CTS 후원방송 신장암','','CTS'],
+  [2026,'3','보도자료','최영주','QWER 어린이병원 후원','','일간지'],
+  [2026,'3','보도자료','최영주','멀티모달 이미징 희귀질환 진단','융합의학과','전문지'],
+  [2026,'3','보도자료','최영주','한국이 전수한 간이식 몽골 300명','LTS','일간지'],
+  [2026,'3','보도자료','최영주','만성 B형간염 조기 치료 간암 위험','GI','일간지'],
+  [2026,'3','취재지원','최영주','한국일보 전문의에게 듣는다 사호석','OPH','한국일보'],
+  [2026,'3','취재지원','최영주','헬스경향 삼킴장애','RM','헬스경향'],
+  [2026,'3','방송','최영주','JTBC 뉴스 먹는 알부민','GI','JTBC'],
+  [2026,'4','보도자료','최영주','HER2 음성 전이성 유방암 먹는 약','ONC','일간지'],
+  [2026,'4','방송','최영주','KBS 생로병사 만성 변비','GI','KBS'],
+  [2026,'4','방송','최영주','KBS 뉴스 먹는 알부민','GI','KBS'],
+  [2026,'4','특집기사','최영주','이데일리 특집 척추센터','','이데일리'],
+  [2026,'4','취재지원','최영주','헬스경향 골전도 이어폰','ENT','헬스경향'],
+  [2026,'5','보도자료','최영주','줄기세포 치료제 핵심 기전 규명','미생물학교실','전문지'],
+  [2026,'5','보도자료','최영주','배우 유해진 서울아산병원 후원','','일간지'],
+  [2026,'5','보도자료','최영주','세계 첫 간이식 9천례','LTS','일간지'],
+  [2026,'5','보도자료','최영주','장초음파 국제인증 2종 국내 첫 획득','GI','일간지'],
+  [2026,'5','보도자료','최영주','방탄소년단 진 1억원 후원','대외협력팀','일간지'],
+  [2026,'5','특집기사','최영주','헬스경향 암병원','암병원','헬스경향'],
+  [2026,'5','취재지원','최영주','헬스경향 코골이','ENT','헬스경향'],
+  [2026,'5','취재지원','최영주','임상유전상담사 인터뷰','의학유전학센터','헬스경향'],
+  [2026,'1','보도자료','윤주은','반일치 조혈모세포이식 소아청소년 재생불량성빈혈','PHO','일간지'],
+  [2026,'1','보도자료','윤주은','내시경 초음파 조직검사 림프종 진단','GI','일간지헬스'],
+  [2026,'1','보도자료','윤주은','온 가족이 알아야 할 고령자 응급대처법 출간','EM','일간지'],
+  [2026,'1','보도자료','윤주은','스스로 중심 잡는 아이들 자기결정력 출간','PPS','일간지'],
+  [2026,'1','칼럼','윤주은','병원인 2026년 새해 소망','어린이병원','병원신문'],
+  [2026,'1','취재지원','윤주은','뇌졸중 환자 시야장애 디지털 치료제','NR','헬스조선'],
+  [2026,'1','취재지원','윤주은','겨울철 관상동맥질환','CV','파이낸셜뉴스'],
+  [2026,'1','취재지원','윤주은','탈모','DER','내일신문'],
+  [2026,'1','취재지원','윤주은','노로바이러스','INF','한스경제'],
+  [2026,'1','취재지원','윤주은','치매','NR','매일경제'],
+  [2026,'2','보도자료','윤주은','생존율 낮은 전이암 면역치료 가능성','미생물학교실','전문지'],
+  [2026,'2','취재지원','윤주은','중앙일보 특집 비만','END','중앙일보'],
+  [2026,'2','취재지원','윤주은','심장판막질환','CV','뉴시스'],
+  [2026,'2','취재지원','윤주은','고령자 응급대처법 관련 인터뷰','EM','매일경제'],
+  [2026,'3','보도자료','윤주은','검사 어려운 뇌 질환 혈액 뇌세포 신호','NR',''],
+  [2026,'3','취재지원','윤주은','복부대동맥류 관련 인터뷰','VAS','중앙헬스'],
+  [2026,'3','취재지원','윤주은','고령자 응급대처법 인터뷰','EM','한국일보'],
+  [2026,'3','취재지원','윤주은','고령자 응급대처법 유튜브','EM','채널A'],
+  [2026,'3','취재지원','윤주은','협심증','CV','뉴시스'],
+  [2026,'3','취재지원','윤주은','담도암','GI','헬스중앙'],
+  [2026,'4','보도자료','윤주은','생존율 낮은 췌장암 면역 치료 가능성','의생명연구소','일간지헬스'],
+  [2026,'4','보도자료','윤주은','한 권으로 파악하는 어지럼증 출간','ENT/NR',''],
+  [2026,'4','취재지원','윤주은','다재내성 결핵 약제','PLM','메디컬업저버'],
+  [2026,'4','취재지원','윤주은','공황장애 및 불면증 진짜 명의에게','PSY','서울신문'],
+  [2026,'5','보도자료','윤주은','아워히어로즈 울산 조선소 지역 탐방','PHO','중앙일보'],
+  [2026,'5','보도자료','윤주은','초미세수술 로봇 1mm 미만 혈관 문합','PS',''],
+  [2026,'5','특집기사','윤주은','서울아산병원 사회공헌활동','','일간지'],
+  [2026,'5','취재지원','윤주은','호흡기 질환 공기','PLM','월간인물'],
+  [2026,'5','취재지원','윤주은','에볼라바이러스','INF','뉴시스'],
+  [2026,'5','취재지원','윤주은','봄철 심혈관질환','CV','뉴시스'],
+  [2026,'5','취재지원','윤주은','식단 조절 꾸준한 운동 성시경','END','머니투데이'],
+  [2026,'3','보도자료','김서영','제1회 국제암재활포럼','RM',''],
+  [2026,'4','도움말자료','김서영','먹는 알부민 광고의 진실','GI','일간지'],
+  [2026,'4','도움말자료','김서영','파킨슨병','NR',''],
+  [2026,'5','기타','김서영','글로벌 명의 갑상선 종양 고주파절제술','DR','뉴스룸'],
+  [2026,'5','기타','김서영','글로벌 명의 코 성형술','ENT','뉴스룸'],
+  [2026,'5','도움말자료','김서영','자궁경부암 예방주간','OBY',''],
+  [2026,'5','보도자료','김서영','파킨슨알츠하이머센터 심포지엄','NR',''],
+];
+
+let curStaff = '전체';
+let curYr = '전체';
+
+const TYPE_COLOR = {'취재지원':'취재지원','보도자료':'보도자료','방송':'방송','칼럼':'칼럼','특집기사':'특집기사','해외홍보':'해외홍보','도움말자료':'도움말자료','기타':'기타','SNS':'기타','캠페인':'기타','포스터':'기타','디자인':'기타','위기대응':'기타'};
+
+function setYrFilter(yr){
+  curYr=yr;
+  document.querySelectorAll('.ybtn').forEach(b=>b.classList.toggle('active',b.textContent===yr));
+  renderTable();
+}
+
+function setStaffFilter(name){
+  curStaff=name;
+  document.querySelectorAll('.staff-sel-btn').forEach(b=>b.classList.toggle('active',b.textContent===name));
+  renderTable();
+}
+
+function renderTable(){
+  let rows=ALL_DATA.filter(r=>{
+    const sm=curStaff==='전체'||r[3].includes(curStaff);
+    const ym=curYr==='전체'||String(r[0])===curYr;
+    return sm&&ym;
+  });
+  const tbody=document.getElementById('staff-tbody');
+  const empty=document.getElementById('staff-empty');
+  const total=rows.length;
+  const tc={};
+  rows.forEach(r=>{tc[r[2]]=(tc[r[2]]||0)+1;});
+  document.getElementById('sum-total').textContent=total;
+  document.getElementById('sum-types').textContent=Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k} ${v}건`).join('  ·  ');
+  if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  rows.sort((a,b)=>a[0]!==b[0]?b[0]-a[0]:parseInt(b[1]||0)-parseInt(a[1]||0));
+  tbody.innerHTML=rows.map(r=>{
+    const [yr,mo,type,staff,title,dept,media]=r;
+    const tc2=TYPE_COLOR[type]||'기타';
+    return `<tr><td>${yr}</td><td>${mo}월</td><td><span class="tag-type tag-${tc2}">${type}</span></td><td>${staff}</td><td style="max-width:320px;word-break:keep-all">${title}</td><td style="color:var(--text3);font-size:12px">${dept||'-'}</td><td style="font-size:12px">${media||'-'}</td></tr>`;
+  }).join('');
+}
+
+/* 담당자 탭 열릴 때 테이블 초기화 */
+function drawTerms(){
+  const kws=[
+    {text:'치료 기록 (최초·최다·례수)',count:82,bg:'#8b2020',fg:'#fff'},
+    {text:'이식',count:68,bg:'#2d6a4f',fg:'#fff'},
+    {text:'AI · 인공지능',count:55,bg:'#1a3a6b',fg:'#fff'},
+    {text:'뉴스위크 세계 최고 병원',count:48,bg:'#5b4a8a',fg:'#fff'},
+    {text:'K-메디컬 · 글로벌',count:42,bg:'#1a7a6a',fg:'#fff'},
+    {text:'로봇수술',count:38,bg:'#b5601a',fg:'#fff'},
+    {text:'암병원',count:35,bg:'#7a2845',fg:'#fff'},
+    {text:'사회공헌 · 나눔',count:30,bg:'#888780',fg:'#fff'},
+    {text:'줄기세포',count:22,bg:'#e6eef8',fg:'#1a3a6b'},
+    {text:'협진',count:18,bg:'#e6f4eb',fg:'#1a472a'},
+    {text:'외국인 환자',count:25,bg:'#f1efe8',fg:'#444441'},
+    {text:'다큐멘터리',count:15,bg:'#fef0e0',fg:'#8b4a10'},
+    {text:'임상시험',count:14,bg:'#f9f8f5',fg:'#888'},
+    {text:'중입자치료',count:8,bg:'#fce8e8',fg:'#8b2020'},
+    {text:'저속노화',count:12,bg:'#e1f5ee',fg:'#0f6e56'},
+  ];
+  const cl=document.getElementById('tagCloud');
+  kws.sort((a,b)=>b.count-a.count).forEach(k=>{
+    const s=document.createElement('span');
+    s.className='tag';
+    s.style.cssText=`background:${k.bg};color:${k.fg};border:none;font-size:${Math.max(11,10+Math.log(k.count)*3)}px`;
+    s.textContent=`${k.text}  ${k.count}건`;
+    cl.appendChild(s);
+  });
+
+  new Chart(document.getElementById('c-cluster'),{type:'doughnut',data:{labels:['암·종양','심장·혈관','소화기','이식·외과','AI·기술','글로벌·사회공헌','신경·정신','기타'],datasets:[{data:[200,180,140,130,95,110,85,173],backgroundColor:['#8b2020','#7a2845','#2d6a4f','#1a3a6b','#5b4a8a','#b5601a','#1a7a6a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tx,font:{size:11},padding:8,boxWidth:12}}}}});
+}
+</script>
+
+
+</body></html>
