@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Sheets 데이터 로드 테스트</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Google Sheets 데이터 로드 테스트</h1>
+  <div id="status">로드 중...</div>
+  <div id="output" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; font-family: monospace; white-space: pre-wrap;"></div>
+
+  <script>
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXnFjevqugu1YC45FZGH_l7Zh-eIiTE49NWulz8wKV9MFKweFC4o3PVMXpJYrka0IPwg/exec';
+
+    async function loadData() {
+      try {
+        console.log('데이터 로드 시작...');
+        document.getElementById('output').textContent = '요청 중...';
+
+        const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
+        console.log('응답 받음:', response.status);
+
+        if (!response.ok) {
+          throw new Error(`HTTP 오류: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('데이터 파싱 완료:', data);
+
+        document.getElementById('status').textContent = `✅ 성공! ${data.length}건의 데이터 로드됨`;
+        document.getElementById('output').textContent = JSON.stringify(data.slice(0, 5), null, 2) + '\n\n... 총 ' + data.length + '건';
+      } catch (error) {
+        console.error('에러:', error);
+        document.getElementById('status').textContent = `❌ 실패: ${error.message}`;
+        document.getElementById('output').textContent = '에러 상세:\n' + error.stack;
+      }
+    }
+
+    // 페이지 로드 시 실행
+    window.addEventListener('load', loadData);
+  </script>
+</body>
+</html>
