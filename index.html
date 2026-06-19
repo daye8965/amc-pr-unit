@@ -327,6 +327,17 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 
 <!-- ④ 진료과 분석 -->
 <section class="sec" id="sec-dept">
+  <!-- 연도 필터 -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem" id="dept-yr-filter-btns">
+    <button class="ybtn active" onclick="setDeptYrFilter('전체')">전체</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2021')">2021</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2022')">2022</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2023')">2023</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2024')">2024</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2025')">2025</button>
+    <button class="ybtn" onclick="setDeptYrFilter('2026')">2026</button>
+  </div>
+
   <div class="g2">
     <div class="card" style="margin-bottom:0">
       <div class="ctitle">진료과별 홍보 건수 TOP30</div>
@@ -407,10 +418,15 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
     </div>
 
     <!-- 요약 바 -->
-    <div id="list-summary" style="display:flex;align-items:center;gap:16px;padding:10px 14px;background:var(--surface2);border-radius:8px;margin-bottom:1rem;font-size:13px;flex-wrap:wrap">
-      <span>전체 <strong id="sum-total">-</strong>건</span>
-      <span style="color:var(--text3)">|</span>
-      <span id="sum-types" style="color:var(--text2)"></span>
+    <div id="list-summary" style="display:flex;align-items:center;gap:16px;padding:12px 14px;background:var(--surface2);border-radius:8px;margin-bottom:1.5rem;font-size:13px;flex-wrap:wrap">
+      <span style="font-weight:600">전체 <strong id="sum-total" style="color:var(--blue)">-</strong>건</span>
+      <span style="color:var(--border)">|</span>
+      <div id="sum-types" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
+
+    <!-- 구분 필터 리셋 버튼 (숨김) -->
+    <div id="type-filter-reset" style="display:none;margin-bottom:1rem">
+      <button onclick="setTypeFilter('전체')" style="padding:8px 14px;background:#e0e7ff;color:var(--blue);border:1px solid var(--blue);border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;font-family:'Noto Sans KR',sans-serif">← 뒤로가기</button>
     </div>
 
     <!-- 목록 테이블 -->
@@ -614,7 +630,18 @@ function drawCompare(){
 
 /* ── 2026년 상세 ── */
 function draw2026(){
-  new Chart(document.getElementById('c26-month'),{type:'bar',data:{labels:['1월','2월','3월','4월','5월'],datasets:[{data:[37,28,41,43,59],backgroundColor:['#888780','#888780','#2d6a4f','#2d6a4f','#1a3a6b'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+  // 월별 구분별 데이터 계산
+  const monthData={};
+  ALL_DATA.filter(r=>String(r[0])=='2026').forEach(r=>{
+    const mo=r[1];const ty=r[2];
+    if(!monthData[mo])monthData[mo]={};
+    monthData[mo][ty]=(monthData[mo][ty]||0)+1;
+  });
+  const months=['1','2','3','4','5'];
+  const types=['취재지원','보도자료','방송','칼럼','특집기사','기타'];
+  const colors={'취재지원':'#2d6a4f','보도자료':'#1a3a6b','방송':'#7a2845','칼럼':'#5b4a8a','특집기사':'#b5601a','기타':'#888780'};
+  const datasets=types.map(t=>({label:t,data:months.map(m=>(monthData[m]&&monthData[m][t])||0),backgroundColor:colors[t],borderRadius:2}));
+  new Chart(document.getElementById('c26-month'),{type:'bar',data:{labels:months.map(m=>m+'월'),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
 
   new Chart(document.getElementById('c26-type'),{type:'doughnut',data:{labels:['취재지원 94','보도자료 73','방송 16','특집기사 9','칼럼 8','기타 8'],datasets:[{data:[94,73,16,9,8,8],backgroundColor:['#2d6a4f','#1a3a6b','#7a2845','#b5601a','#5b4a8a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 
@@ -640,15 +667,33 @@ function draw2026(){
   new Chart(document.getElementById('c26-media'),{type:'bar',data:{labels:['일간지','KBS','한국일보','전문지','서울신문','매일경제','일간지헬스','헬스경향','중앙일보','EBS','조선일보','뉴스1'],datasets:[{data:[25,11,10,9,8,8,8,7,7,4,4,4],backgroundColor:'#1a3a6b',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:12}}}}}});
 }
 
+/* ── 연도 필터 (진료과) ── */
+function setDeptYrFilter(yr){
+  deptYr=yr;
+  document.querySelectorAll('#dept-yr-filter-btns .ybtn').forEach(b=>b.classList.toggle('active',b.textContent===yr));
+  drawDept();
+}
+
 /* ── 진료과 ── */
 function drawDept(){
-  const depts=['CV','GI','LTS','NR','OS','OPH','BR','ENT','ONC','PSY','CS','GIM','PLM','NS','OBY','ALG','END','URO','PS','INF','PPS','HBP','RHE','CRS','FM','DER','PHO','RM','MG','KT'];
-  const vals=[78,55,42,38,36,32,30,28,27,25,24,23,22,20,20,18,17,16,15,14,13,12,11,10,10,10,9,9,9,8];
+  // 연도 필터 적용
+  const filteredData = deptYr==='전체' ? ALL_DATA : ALL_DATA.filter(r=>String(r[0])===deptYr);
+
+  // 진료과별 건수 집계
+  const deptCount={};
+  filteredData.forEach(r=>{const d=r[5];if(d)deptCount[d]=(deptCount[d]||0)+1;});
+  const sortedDepts = Object.entries(deptCount).sort((a,b)=>b[1]-a[1]).slice(0,30);
+  const depts = sortedDepts.map(d=>d[0]);
+  const vals = sortedDepts.map(d=>d[1]);
+
   new Chart(document.getElementById('c-dept'),{type:'bar',data:{labels:depts,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=30?'#1a3a6b':v>=15?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
-  // 교수별 전체 집계 (2021~2026)
-  const profNames=['정희원','박승정','박덕우','이승규','김희정','정석훈','이범희','권순억','김도훈','김성훈','임영석','김용길','유창훈','이대호','정선주','김남국','박홍주','이세원','전인호','김기훈','사호석','이준엽','김대희','황대욱','장일영'];
-  const profVals=[38,35,32,30,28,25,24,22,22,20,20,18,18,17,17,16,16,15,15,14,14,14,13,12,12];
+  // 교수별 집계 (선택된 연도)
+  const profCount={};
+  filteredData.forEach(r=>{const p=r[8];if(p)profCount[p]=(profCount[p]||0)+1;});
+  const sortedProfs = Object.entries(profCount).sort((a,b)=>b[1]-a[1]).slice(0,25);
+  const profNames = sortedProfs.map(p=>p[0]);
+  const profVals = sortedProfs.map(p=>p[1]);
   new Chart(document.getElementById('c-prof-all'),{type:'bar',data:{labels:profNames,datasets:[{data:profVals,backgroundColor:profVals.map(v=>v>=30?'#7a2845':v>=20?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
   new Chart(document.getElementById('c-role'),{type:'doughnut',data:{labels:['의사/교수 (75%)','병원 기관 (15%)','비의사 직종 (10%)'],datasets:[{data:[75,15,10],backgroundColor:['#2d6a4f','#1a3a6b','#b5601a'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12}}}}});
@@ -673,6 +718,7 @@ function drawStaff(){
 let curStaff = '전체';
 let curYr = '전체';
 let curType = '전체';
+let deptYr = '전체';
 
 const TYPE_COLOR = {'취재지원':'취재지원','보도자료':'보도자료','방송':'방송','칼럼':'칼럼','특집기사':'특집기사','해외홍보':'해외홍보','도움말자료':'도움말자료','기타':'기타','SNS':'기타','캠페인':'기타','포스터':'기타','디자인':'기타','위기대응':'기타'};
 
@@ -692,6 +738,22 @@ function setStaffFilter(name){
 function setTypeFilter(type){
   curType=type==='전체'?'전체':type;
   renderTable();
+  // 구분 필터 버튼 활성화/비활성화 표시
+  document.querySelectorAll('[data-type-btn]').forEach(btn=>{
+    const isActive = btn.getAttribute('data-type-btn') === curType;
+    if(isActive){
+      btn.style.background = 'var(--blue)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = 'var(--blue)';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = curType==='전체' ? 'var(--text2)' : 'var(--text3)';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.opacity = curType==='전체' ? '1' : '0.5';
+    }
+  });
+  // 뒤로가기 버튼 표시
+  document.getElementById('type-filter-reset').style.display = curType==='전체' ? 'none' : 'block';
 }
 
 function renderTable(){
@@ -709,7 +771,12 @@ function renderTable(){
   const tc={};
   rows.forEach(r=>{tc[r[2]]=(tc[r[2]]||0)+1;});
   document.getElementById('sum-total').textContent=total;
-  document.getElementById('sum-types').innerHTML=Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span style="cursor:pointer;color:var(--blue);font-weight:600" onclick="setTypeFilter('${k}')">${k} ${v}건</span>`).join('  ·  ');
+  const typeButtons = Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<button data-type-btn="${k}" onclick="setTypeFilter('${k}')" style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:500;font-size:12px;font-family:'Noto Sans KR',sans-serif;background:transparent;color:var(--text2);transition:all .2s">${k} ${v}건</button>`).join('');
+  document.getElementById('sum-types').innerHTML = typeButtons || '<span style="color:var(--text3)">데이터 없음</span>';
+  // 초기 활성화 상태 설정
+  if(curType !== '전체'){
+    setTypeFilter(curType);
+  }
   if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   rows.sort((a,b)=>a[0]!==b[0]?b[0]-a[0]:parseInt(b[1]||0)-parseInt(a[1]||0));
