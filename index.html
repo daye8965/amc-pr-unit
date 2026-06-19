@@ -509,7 +509,8 @@ async function loadGoogleSheetsData() {
       row.staff,
       row.title,
       row.dept,
-      row.media
+      row.media,
+      row.doctor
     ]);
     console.log('데이터 로드 완료:', ALL_DATA.length, '건');
     // 데이터 로드 후 필요한 초기화
@@ -660,8 +661,11 @@ function draw2026(){
   const v26=[17,14,8,7,7,6,6,5,5,5,5,5,5,5,4,4,4,4,4,3,3,3,3,3,3];
   new Chart(document.getElementById('c26-dept'),{type:'bar',data:{labels:d26,datasets:[{data:v26,backgroundColor:v26.map(v=>v>=10?'#1a3a6b':v>=5?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
-  const profs26=['최재순','김희정','안정민','장건영','서준교','임영석','원종현','사호석','김준성','전인호','신동명','임호준','박덕우','조성양','송시열','이승규','강덕현','강우석','유달산','이병섭','변정식','홍석호','윤덕현','이은주','권혁수'];
-  const pvals26=[5,5,4,4,4,4,4,4,4,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2];
+  const profCount26={};
+  ALL_DATA.filter(r=>String(r[0])==='2026').forEach(r=>{const p=r[7];if(p)profCount26[p]=(profCount26[p]||0)+1;});
+  const sortedProfs26=Object.entries(profCount26).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  const profs26=sortedProfs26.map(p=>p[0]);
+  const pvals26=sortedProfs26.map(p=>p[1]);
   new Chart(document.getElementById('c26-prof'),{type:'bar',data:{labels:profs26,datasets:[{data:pvals26,backgroundColor:pvals26.map(v=>v>=5?'#7a2845':v>=3?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx,stepSize:1}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
   new Chart(document.getElementById('c26-media'),{type:'bar',data:{labels:['일간지','KBS','한국일보','전문지','서울신문','매일경제','일간지헬스','헬스경향','중앙일보','EBS','조선일보','뉴스1'],datasets:[{data:[25,11,10,9,8,8,8,7,7,4,4,4],backgroundColor:'#1a3a6b',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:12}}}}}});
@@ -690,7 +694,7 @@ function drawDept(){
 
   // 교수별 집계 (선택된 연도)
   const profCount={};
-  filteredData.forEach(r=>{const p=r[8];if(p)profCount[p]=(profCount[p]||0)+1;});
+  filteredData.forEach(r=>{const p=r[7];if(p)profCount[p]=(profCount[p]||0)+1;});
   const sortedProfs = Object.entries(profCount).sort((a,b)=>b[1]-a[1]).slice(0,25);
   const profNames = sortedProfs.map(p=>p[0]);
   const profVals = sortedProfs.map(p=>p[1]);
