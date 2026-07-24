@@ -495,7 +495,7 @@ async function loadGoogleSheetsData() {
   try {
     const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
     const data = await response.json();
-    ALL_DATA = data.map(row => [
+    const raw = data.map(row => [
       row.year,
       row.month,
       row.type,
@@ -505,7 +505,16 @@ async function loadGoogleSheetsData() {
       row.media,
       row.doctor
     ]);
-    console.log('데이터 로드 완료:', ALL_DATA.length, '건');
+    // 보도자료 중복 제거: 같은 년+월+제목이면 1건으로 집계
+    const seenPR = new Set();
+    ALL_DATA = raw.filter(r => {
+      if (r[2] !== '보도자료') return true;
+      const key = String(r[0]) + '|' + String(r[1]) + '|' + String(r[4]||'').trim();
+      if (seenPR.has(key)) return false;
+      seenPR.add(key);
+      return true;
+    });
+    console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건)');
     // 데이터 로드 후 필요한 초기화
     initDashboard();
   } catch (error) {
