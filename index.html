@@ -204,22 +204,22 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 <!-- ① 전체 현황 -->
 <section class="sec active" id="sec-overview">
   <div class="mrow">
-    <div class="mc g"><div class="mlabel">총 홍보 건수</div><div class="mval">1,113<span class="munit">건</span></div><div class="msub">2021~2026 누적</div></div>
-    <div class="mc a"><div class="mlabel">연평균 건수</div><div class="mval">186<span class="munit">건</span></div><div class="msub">6개년 기준</div></div>
-    <div class="mc b"><div class="mlabel">역대 최다 연도</div><div class="mval">2022<span class="munit">년</span></div><div class="msub">236건</div></div>
-    <div class="mc p"><div class="mlabel">2026 YTD</div><div class="mval">105<span class="munit">건</span></div><div class="msub">1~5월 누계</div></div>
-    <div class="mc t"><div class="mlabel">참여 담당자</div><div class="mval">11<span class="munit">명</span></div><div class="msub">6개년 전체</div></div>
+    <div class="mc g"><div class="mlabel">총 홍보 건수</div><div class="mval" id="ov-total">-<span class="munit">건</span></div><div class="msub">2021~2026 누적</div></div>
+    <div class="mc a"><div class="mlabel">연평균 건수</div><div class="mval" id="ov-avg">-<span class="munit">건</span></div><div class="msub">6개년 기준</div></div>
+    <div class="mc b"><div class="mlabel">역대 최다 연도</div><div class="mval" id="ov-bestyr">-<span class="munit">년</span></div><div class="msub" id="ov-bestyr-sub">-건</div></div>
+    <div class="mc p"><div class="mlabel">2026 YTD</div><div class="mval" id="ov-ytd">-<span class="munit">건</span></div><div class="msub" id="ov-ytd-sub">로딩 중</div></div>
+    <div class="mc t"><div class="mlabel">참여 담당자</div><div class="mval" id="ov-staff">-<span class="munit">명</span></div><div class="msub">6개년 전체</div></div>
   </div>
   <div class="g2">
     <div class="card" style="margin-bottom:0">
-      <div class="ctitle">구분별 전체 비중</div><div class="csub">2021~2026 누적 1,113건</div>
-      <div class="legend">
-        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원 293건</span>
-        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료 281건</span>
-        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼 140건</span>
-        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송 133건</span>
-        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사 91건</span>
-        <span class="li"><span class="ldot" style="background:#888780"></span>기타 175건</span>
+      <div class="ctitle">구분별 전체 비중</div><div class="csub" id="ov-csub">로딩 중...</div>
+      <div class="legend" id="ov-type-legend">
+        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원</span>
+        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료</span>
+        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼</span>
+        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송</span>
+        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사</span>
+        <span class="li"><span class="ldot" style="background:#888780"></span>기타</span>
       </div>
       <div class="cwrap" style="height:250px"><canvas id="c-type" role="img" aria-label="구분별 홍보 건수 도넛 차트" width="949" height="437" style="display: block; box-sizing: border-box; height: 250px; width: 542px;">취재지원 293건, 보도자료 281건, 칼럼 140건, 방송 133건, 특집기사 91건, 기타 175건</canvas></div>
     </div>
@@ -244,13 +244,8 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 
 <!-- ② 연도별 비교 -->
 <section class="sec" id="sec-compare">
-  <div class="cmp-grid">
-    <div class="cmp-card"><div class="cmp-yr">2021</div><div class="cmp-val">149건</div><div class="cmp-diff eq">기준연도</div><div style="font-size:11px;color:var(--text3);margin-top:5px">보도자료 중심<br>신윤호·이다예 활약</div></div>
-    <div class="cmp-card"><div class="cmp-yr">2022</div><div class="cmp-val">236건</div><div class="cmp-diff up">▲ +87건 vs 2021</div><div style="font-size:11px;color:var(--text3);margin-top:5px">역대 최다<br>해외홍보 본격화</div></div>
-    <div class="cmp-card"><div class="cmp-yr">2023</div><div class="cmp-val">212건</div><div class="cmp-diff dn">▼ −24건 vs 2022</div><div style="font-size:11px;color:var(--text3);margin-top:5px">특집기사 증가<br>김준호 합류</div></div>
-    <div class="cmp-card"><div class="cmp-yr">2024</div><div class="cmp-val">198건</div><div class="cmp-diff dn">▼ −14건 vs 2023</div><div style="font-size:11px;color:var(--text3);margin-top:5px">의정갈등 영향<br>박준규 성장</div></div>
-    <div class="cmp-card"><div class="cmp-yr">2025</div><div class="cmp-val">213건</div><div class="cmp-diff up">▲ +15건 vs 2024</div><div style="font-size:11px;color:var(--text3);margin-top:5px">박준규 주력<br>윤주은 성장</div></div>
-    <div class="cmp-card" style="border-color:#2d6a4f"><div class="cmp-yr">2026 (YTD)</div><div class="cmp-val">105건</div><div class="cmp-diff up">연간 환산 약 250건 예상</div><div style="font-size:11px;color:var(--text3);margin-top:5px">1~5월 기준<br>역대급 페이스</div></div>
+  <div class="cmp-grid" id="cmp-cards">
+    <div class="cmp-card"><div class="cmp-yr">로딩 중...</div><div class="cmp-val">-건</div></div>
   </div>
   <div class="g2">
     <div class="card" style="margin-bottom:0">
@@ -271,11 +266,11 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 <!-- ③ 2026년 상세 -->
 <section class="sec" id="sec-y2026">
   <div class="mrow">
-    <div class="mc g"><div class="mlabel">2026 총 건수 (YTD)</div><div class="mval">208<span class="munit">건</span></div><div class="msub">1~5월 기준</div></div>
-    <div class="mc a"><div class="mlabel">월 평균</div><div class="mval">41.6<span class="munit">건</span></div><div class="msub">연간 환산 약 250건</div></div>
-    <div class="mc b"><div class="mlabel">최다 담당 (박준규)</div><div class="mval">52<span class="munit">건</span></div><div class="msub">전체의 25%</div></div>
-    <div class="mc p"><div class="mlabel">최다 진료과 (GI)</div><div class="mval">17<span class="munit">건</span></div><div class="msub">소화기내과</div></div>
-    <div class="mc t"><div class="mlabel">최다 교수 (최재순·김희정)</div><div class="mval">5<span class="munit">건</span></div><div class="msub">각 5건 공동 1위</div></div>
+    <div class="mc g"><div class="mlabel">2026 총 건수 (YTD)</div><div class="mval" id="y26-total">-<span class="munit">건</span></div><div class="msub" id="y26-total-sub">로딩 중</div></div>
+    <div class="mc a"><div class="mlabel">월 평균</div><div class="mval" id="y26-avg">-<span class="munit">건</span></div><div class="msub" id="y26-avg-sub">-</div></div>
+    <div class="mc b"><div class="mlabel" id="y26-top-staff-label">최다 담당</div><div class="mval" id="y26-top-staff">-<span class="munit">건</span></div><div class="msub" id="y26-top-staff-sub">-</div></div>
+    <div class="mc p"><div class="mlabel" id="y26-top-dept-label">최다 진료과</div><div class="mval" id="y26-top-dept">-<span class="munit">건</span></div><div class="msub" id="y26-top-dept-sub">-</div></div>
+    <div class="mc t"><div class="mlabel" id="y26-top-prof-label">최다 교수</div><div class="mval" id="y26-top-prof">-<span class="munit">건</span></div><div class="msub" id="y26-top-prof-sub">-</div></div>
   </div>
 
   <div class="g2">
@@ -284,14 +279,14 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
       <div class="cwrap" style="height:220px"><canvas id="c26-month" role="img" aria-label="2026년 월별 홍보 건수">1월 37건, 2월 28건, 3월 41건, 4월 43건, 5월 59건</canvas></div>
     </div>
     <div class="card" style="margin-bottom:0">
-      <div class="ctitle">구분별 분포</div><div class="csub">2026년 208건</div>
-      <div class="legend">
-        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원 94</span>
-        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료 73</span>
-        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송 16</span>
-        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사 9</span>
-        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼 8</span>
-        <span class="li"><span class="ldot" style="background:#888780"></span>기타 8</span>
+      <div class="ctitle">구분별 분포</div><div class="csub" id="c26-type-csub">로딩 중...</div>
+      <div class="legend" id="c26-type-legend">
+        <span class="li"><span class="ldot" style="background:#2d6a4f"></span>취재지원</span>
+        <span class="li"><span class="ldot" style="background:#1a3a6b"></span>보도자료</span>
+        <span class="li"><span class="ldot" style="background:#7a2845"></span>방송</span>
+        <span class="li"><span class="ldot" style="background:#b5601a"></span>특집기사</span>
+        <span class="li"><span class="ldot" style="background:#5b4a8a"></span>칼럼</span>
+        <span class="li"><span class="ldot" style="background:#888780"></span>기타</span>
       </div>
       <div class="cwrap" style="height:200px"><canvas id="c26-type" role="img" aria-label="2026년 구분별 홍보 건수 도넛"></canvas></div>
     </div>
@@ -488,8 +483,6 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 
 <script>
 const gr='rgba(0,0,0,0.06)',tx='#6b6b65';
-const YRS=['2021','2022','2023','2024','2025','2026(YTD)'];
-const TOTALS=[149,236,212,198,213,208];
 const drawn={};
 const tabOrder=['overview','compare','y2026','dept','staff','terms'];
 const tabNames=['전체 현황','연도별 비교','2026년 상세','진료과 분석','담당자 현황','키워드·브랜딩'];
@@ -585,6 +578,7 @@ function show(name){
   document.getElementById('sec-'+name).classList.add('active');
   document.querySelectorAll('.tab')[tabOrder.indexOf(name)].classList.add('active');
   if(!drawn[name]){
+    if(name==='overview')drawOverview();
     if(name==='compare')drawCompare();
     if(name==='y2026')draw2026();
     if(name==='dept')drawDept();
@@ -594,39 +588,119 @@ function show(name){
   }
 }
 
+/* ── 차트 재생성 헬퍼 ── */
+function destroyChart(id){const c=Chart.getChart(id);if(c)c.destroy();}
+
+/* ── 연도/구분별 집계 헬퍼 ── */
+const TYPES_ORDER=['취재지원','보도자료','방송','칼럼','특집기사','기타'];
+const TYPE_BG={'취재지원':'#2d6a4f','보도자료':'#1a3a6b','방송':'#7a2845','칼럼':'#5b4a8a','특집기사':'#b5601a','기타':'#888780'};
+const YKEYS=['2021','2022','2023','2024','2025','2026'];
+
+function buildYrTypeMap(){
+  const m={};
+  YKEYS.forEach(y=>{m[y]={};});
+  ALL_DATA.forEach(r=>{
+    const y=String(r[0]),t=r[2]||'기타';
+    const ty=TYPES_ORDER.includes(t)?t:'기타';
+    if(!m[y])m[y]={};
+    m[y][ty]=(m[y][ty]||0)+1;
+  });
+  return m;
+}
+
 /* ── 전체 현황 ── */
-new Chart(document.getElementById('c-type'),{type:'doughnut',data:{labels:['취재지원','보도자료','칼럼','방송','특집기사','기타'],datasets:[{data:[293,281,140,133,91,175],backgroundColor:['#2d6a4f','#1a3a6b','#5b4a8a','#7a2845','#b5601a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+function drawOverview(){
+  const yrType=buildYrTypeMap();
+  const totals=YKEYS.map(y=>Object.values(yrType[y]||{}).reduce((a,b)=>a+b,0));
+  const grandTotal=totals.reduce((a,b)=>a+b,0);
+  const total26=totals[5];
 
-new Chart(document.getElementById('c-yr-bar'),{type:'bar',data:{labels:YRS,datasets:[{data:TOTALS,backgroundColor:['#888780','#1a3a6b','#888780','#888780','#2d6a4f','#b5601a'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+  // 구분별 전체 합계
+  const typeTotal={};
+  TYPES_ORDER.forEach(t=>{typeTotal[t]=YKEYS.reduce((s,y)=>s+(yrType[y][t]||0),0);});
 
-new Chart(document.getElementById('c-stacked'),{type:'bar',data:{labels:YRS,datasets:[
-  {label:'취재지원',data:[38,60,55,52,58,30],backgroundColor:'#2d6a4f',borderRadius:2},
-  {label:'보도자료',data:[45,55,50,48,55,28],backgroundColor:'#1a3a6b',borderRadius:2},
-  {label:'칼럼',data:[25,35,20,28,32,12],backgroundColor:'#5b4a8a',borderRadius:2},
-  {label:'방송',data:[18,28,30,25,22,10],backgroundColor:'#7a2845',borderRadius:2},
-  {label:'특집기사',data:[8,18,22,15,18,10],backgroundColor:'#b5601a',borderRadius:2},
-  {label:'기타',data:[15,40,35,30,28,15],backgroundColor:'#888780',borderRadius:2},
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12,boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+  // 역대 최다 (2026 제외)
+  const maxIdx=totals.slice(0,5).reduce((mi,v,i,arr)=>v>arr[mi]?i:mi,0);
+
+  // 참여 담당자
+  const staffSet=new Set(ALL_DATA.map(r=>r[3]).filter(Boolean));
+
+  // 2026 YTD 최신 월
+  const months26=[...new Set(ALL_DATA.filter(r=>String(r[0])==='2026').map(r=>r[1]))].sort((a,b)=>Number(a)-Number(b));
+  const lastMo=months26.length?months26[months26.length-1]:'?';
+
+  // 메트릭 카드
+  document.getElementById('ov-total').innerHTML=grandTotal.toLocaleString()+'<span class="munit">건</span>';
+  document.getElementById('ov-avg').innerHTML=Math.round(grandTotal/6).toLocaleString()+'<span class="munit">건</span>';
+  document.getElementById('ov-bestyr').innerHTML=YKEYS[maxIdx]+'<span class="munit">년</span>';
+  document.getElementById('ov-bestyr-sub').textContent=totals[maxIdx]+'건';
+  document.getElementById('ov-ytd').innerHTML=total26.toLocaleString()+'<span class="munit">건</span>';
+  document.getElementById('ov-ytd-sub').textContent='1~'+lastMo+'월 누계';
+  document.getElementById('ov-staff').innerHTML=staffSet.size+'<span class="munit">명</span>';
+
+  // csub & 범례
+  document.getElementById('ov-csub').textContent='2021~2026 누적 '+grandTotal.toLocaleString()+'건';
+  document.getElementById('ov-type-legend').innerHTML=TYPES_ORDER.map(t=>
+    `<span class="li"><span class="ldot" style="background:${TYPE_BG[t]}"></span>${t} ${typeTotal[t]}건</span>`
+  ).join('');
+
+  // 도넛 차트
+  destroyChart('c-type');
+  new Chart(document.getElementById('c-type'),{type:'doughnut',data:{labels:TYPES_ORDER,datasets:[{data:TYPES_ORDER.map(t=>typeTotal[t]),backgroundColor:TYPES_ORDER.map(t=>TYPE_BG[t]),borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+
+  // 연도별 총 건수 막대
+  const barColors=totals.map((v,i)=>i===5?'#b5601a':i===maxIdx?'#2d6a4f':'#888780');
+  destroyChart('c-yr-bar');
+  new Chart(document.getElementById('c-yr-bar'),{type:'bar',data:{labels:['2021','2022','2023','2024','2025','2026(YTD)'],datasets:[{data:totals,backgroundColor:barColors,borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+
+  // 연도별 구분 누적 막대
+  destroyChart('c-stacked');
+  new Chart(document.getElementById('c-stacked'),{type:'bar',data:{labels:['2021','2022','2023','2024','2025','2026(YTD)'],datasets:TYPES_ORDER.map(t=>({label:t,data:YKEYS.map(y=>yrType[y][t]||0),backgroundColor:TYPE_BG[t],borderRadius:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12,boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+}
 
 /* ── 연도별 비교 ── */
 function drawCompare(){
-  new Chart(document.getElementById('c-trend2'),{type:'line',data:{labels:YRS,datasets:[
-    {label:'취재지원',data:[38,60,55,52,58,30],borderColor:'#2d6a4f',backgroundColor:'rgba(45,106,79,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
-    {label:'보도자료',data:[45,55,50,48,55,28],borderColor:'#1a3a6b',backgroundColor:'rgba(26,58,107,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
+  const yrType=buildYrTypeMap();
+  const totals=YKEYS.map(y=>Object.values(yrType[y]||{}).reduce((a,b)=>a+b,0));
+  const yrsLabels=['2021','2022','2023','2024','2025','2026(YTD)'];
+
+  // 연도별 카드 업데이트
+  const cmpGrid=document.getElementById('cmp-cards');
+  if(cmpGrid){
+    cmpGrid.innerHTML=YKEYS.map((y,i)=>{
+      const cnt=totals[i];
+      const diff=i===0?null:cnt-totals[i-1];
+      const diffTxt=diff===null?'기준연도':diff>0?`▲ +${diff}건 vs 전년`:diff<0?`▼ ${diff}건 vs 전년`:'= 전년 대비 동일';
+      const diffCls=diff===null?'eq':diff>0?'up':'dn';
+      const isLast=i===YKEYS.length-1;
+      return `<div class="cmp-card"${isLast?' style="border-color:#2d6a4f"':''}><div class="cmp-yr">${isLast?y+' (YTD)':y}</div><div class="cmp-val">${cnt.toLocaleString()}건</div><div class="cmp-diff ${diffCls}">${diffTxt}</div></div>`;
+    }).join('');
+  }
+
+  destroyChart('c-trend2');
+  new Chart(document.getElementById('c-trend2'),{type:'line',data:{labels:yrsLabels,datasets:[
+    {label:'취재지원',data:YKEYS.map(y=>yrType[y]['취재지원']||0),borderColor:'#2d6a4f',backgroundColor:'rgba(45,106,79,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
+    {label:'보도자료',data:YKEYS.map(y=>yrType[y]['보도자료']||0),borderColor:'#1a3a6b',backgroundColor:'rgba(26,58,107,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
 
-  new Chart(document.getElementById('c-trend3'),{type:'line',data:{labels:YRS,datasets:[
-    {label:'방송',data:[18,28,30,25,22,10],borderColor:'#7a2845',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#7a2845'},
-    {label:'칼럼',data:[25,35,20,28,32,12],borderColor:'#5b4a8a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[5,3]},
-    {label:'특집기사',data:[8,18,22,15,18,10],borderColor:'#b5601a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#b5601a',borderDash:[3,3]},
+  destroyChart('c-trend3');
+  new Chart(document.getElementById('c-trend3'),{type:'line',data:{labels:yrsLabels,datasets:[
+    {label:'방송',data:YKEYS.map(y=>yrType[y]['방송']||0),borderColor:'#7a2845',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#7a2845'},
+    {label:'칼럼',data:YKEYS.map(y=>yrType[y]['칼럼']||0),borderColor:'#5b4a8a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[5,3]},
+    {label:'특집기사',data:YKEYS.map(y=>yrType[y]['특집기사']||0),borderColor:'#b5601a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#b5601a',borderDash:[3,3]},
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
 
-  new Chart(document.getElementById('c-ratio'),{type:'line',data:{labels:['2021','2022','2023','2024','2025'],datasets:[
-    {label:'취재지원(%)',data:[26,25,26,26,27],borderColor:'#2d6a4f',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
-    {label:'보도자료(%)',data:[30,23,24,24,26],borderColor:'#1a3a6b',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
-    {label:'칼럼(%)',data:[17,15,9,14,15],borderColor:'#5b4a8a',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[3,3]},
-    {label:'방송(%)',data:[12,12,14,13,10],borderColor:'#7a2845',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#7a2845'},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx,callback:v=>v+'%'},beginAtZero:true,max:40}}}});
+  // 비율 차트 (2026 제외 - 미완성 연도)
+  const rYears=['2021','2022','2023','2024','2025'];
+  const rTotals=rYears.map(y=>Object.values(yrType[y]||{}).reduce((a,b)=>a+b,0));
+  const pct=(t,y,i)=>rTotals[i]?Math.round((yrType[y][t]||0)/rTotals[i]*100):0;
+  destroyChart('c-ratio');
+  new Chart(document.getElementById('c-ratio'),{type:'line',data:{labels:rYears,datasets:[
+    {label:'취재지원(%)',data:rYears.map((y,i)=>pct('취재지원',y,i)),borderColor:'#2d6a4f',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
+    {label:'보도자료(%)',data:rYears.map((y,i)=>pct('보도자료',y,i)),borderColor:'#1a3a6b',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
+    {label:'칼럼(%)',data:rYears.map((y,i)=>pct('칼럼',y,i)),borderColor:'#5b4a8a',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#5b4a8a',borderDash:[3,3]},
+    {label:'방송(%)',data:rYears.map((y,i)=>pct('방송',y,i)),borderColor:'#7a2845',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:'#7a2845'},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx,callback:v=>v+'%'},beginAtZero:true,max:60}}}});
 }
 
 /* ── 2026년 상세 ── */
@@ -638,37 +712,80 @@ function draw2026(){
     if(!monthData[mo])monthData[mo]={};
     monthData[mo][ty]=(monthData[mo][ty]||0)+1;
   });
-  const months=['1','2','3','4','5'];
-  const types=['취재지원','보도자료','방송','칼럼','특집기사','기타'];
-  const colors={'취재지원':'#2d6a4f','보도자료':'#1a3a6b','방송':'#7a2845','칼럼':'#5b4a8a','특집기사':'#b5601a','기타':'#888780'};
-  const datasets=types.map(t=>({label:t,data:months.map(m=>(monthData[m]&&monthData[m][t])||0),backgroundColor:colors[t],borderRadius:2}));
+  const months=[...new Set(ALL_DATA.filter(r=>String(r[0])==='2026').map(r=>String(r[1])))].sort((a,b)=>Number(a)-Number(b));
+  const datasets=TYPES_ORDER.map(t=>({label:t,data:months.map(m=>(monthData[m]&&monthData[m][t])||0),backgroundColor:TYPE_BG[t],borderRadius:2}));
+  destroyChart('c26-month');
   new Chart(document.getElementById('c26-month'),{type:'bar',data:{labels:months.map(m=>m+'월'),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
 
-  new Chart(document.getElementById('c26-type'),{type:'doughnut',data:{labels:['취재지원 94','보도자료 73','방송 16','특집기사 9','칼럼 8','기타 8'],datasets:[{data:[94,73,16,9,8,8],backgroundColor:['#2d6a4f','#1a3a6b','#7a2845','#b5601a','#5b4a8a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  // 2026 서브셋 (월별 차트 이후 공통으로 사용)
+  const d26all=ALL_DATA.filter(r=>String(r[0])==='2026');
 
-  new Chart(document.getElementById('c26-staff'),{type:'bar',data:{labels:['박준규','전영은','최영주','윤주은','오혜성','김서영'],datasets:[{data:[52,43,40,35,30,8],backgroundColor:['#1a3a6b','#2d6a4f','#b5601a','#7a2845','#5b4a8a','#888780'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx}}}}});
+  // 구분별 도넛
+  const typeCount26={};
+  d26all.forEach(r=>{const t=r[2]||'기타';const ty=TYPES_ORDER.includes(t)?t:'기타';typeCount26[ty]=(typeCount26[ty]||0)+1;});
+  const typeVals26=TYPES_ORDER.map(t=>typeCount26[t]||0);
+  const total26cnt=typeVals26.reduce((a,b)=>a+b,0);
+  document.getElementById('c26-type-csub').textContent='2026년 '+total26cnt+'건';
+  document.getElementById('c26-type-legend').innerHTML=TYPES_ORDER.map((t,i)=>
+    `<span class="li"><span class="ldot" style="background:${TYPE_BG[t]}"></span>${t} ${typeVals26[i]}</span>`
+  ).join('');
+  destroyChart('c26-type');
+  new Chart(document.getElementById('c26-type'),{type:'doughnut',data:{labels:TYPES_ORDER,datasets:[{data:typeVals26,backgroundColor:TYPES_ORDER.map(t=>TYPE_BG[t]),borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 
-  new Chart(document.getElementById('c26-staff-type'),{type:'bar',data:{labels:['박준규','전영은','최영주','윤주은','오혜성','김서영'],datasets:[
-    {label:'취재지원',data:[26,20,8,18,15,0],backgroundColor:'#2d6a4f',borderRadius:2},
-    {label:'보도자료',data:[18,17,18,10,5,3],backgroundColor:'#1a3a6b',borderRadius:2},
-    {label:'방송',data:[4,8,6,1,1,0],backgroundColor:'#7a2845',borderRadius:2},
-    {label:'특집기사',data:[3,4,3,1,0,0],backgroundColor:'#b5601a',borderRadius:2},
-    {label:'칼럼',data:[0,0,0,1,8,0],backgroundColor:'#5b4a8a',borderRadius:2},
-    {label:'기타',data:[1,0,5,4,1,5],backgroundColor:'#888780',borderRadius:2},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+  // 담당자별 건수
+  const staffCnt26={};
+  d26all.forEach(r=>{const s=r[3];if(s)staffCnt26[s]=(staffCnt26[s]||0)+1;});
+  const sStaff26=Object.entries(staffCnt26).sort((a,b)=>b[1]-a[1]);
+  const sNames26=sStaff26.map(s=>s[0]),sVals26=sStaff26.map(s=>s[1]);
+  const SCOL=['#1a3a6b','#2d6a4f','#b5601a','#7a2845','#5b4a8a','#888780'];
+  destroyChart('c26-staff');
+  new Chart(document.getElementById('c26-staff'),{type:'bar',data:{labels:sNames26,datasets:[{data:sVals26,backgroundColor:sVals26.map((_,i)=>SCOL[i%SCOL.length]),borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx}}}}});
 
-  const d26=['GI','CV','NR','GIM','URO','PLM','ENT','FM','의공학연구소','OPH','NS','ONC','BR','DER','OBY','LTS','END','융합의학과','EM','PSY','CS','INF','ALG','PCS','PHO'];
-  const v26=[17,14,8,7,7,6,6,5,5,5,5,5,5,5,4,4,4,4,4,3,3,3,3,3,3];
+  // 담당자별 구분 스택
+  const staffType26={};
+  d26all.forEach(r=>{const s=r[3],t=r[2]||'기타';const ty=TYPES_ORDER.includes(t)?t:'기타';if(s){if(!staffType26[s])staffType26[s]={};staffType26[s][ty]=(staffType26[s][ty]||0)+1;}});
+  destroyChart('c26-staff-type');
+  new Chart(document.getElementById('c26-staff-type'),{type:'bar',data:{labels:sNames26,datasets:TYPES_ORDER.map(t=>({label:t,data:sNames26.map(s=>(staffType26[s]&&staffType26[s][t])||0),backgroundColor:TYPE_BG[t],borderRadius:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
+
+  // 진료과별
+  const deptCnt26={};
+  d26all.forEach(r=>{const d=r[5];if(d)deptCnt26[d]=(deptCnt26[d]||0)+1;});
+  const sDept26=Object.entries(deptCnt26).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  const d26=sDept26.map(d=>d[0]),v26=sDept26.map(d=>d[1]);
+  destroyChart('c26-dept');
   new Chart(document.getElementById('c26-dept'),{type:'bar',data:{labels:d26,datasets:[{data:v26,backgroundColor:v26.map(v=>v>=10?'#1a3a6b':v>=5?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
   const profCount26={};
-  ALL_DATA.filter(r=>String(r[0])==='2026').forEach(r=>{const p=r[7];if(p)profCount26[p]=(profCount26[p]||0)+1;});
+  d26all.forEach(r=>{const p=r[7];if(p)profCount26[p]=(profCount26[p]||0)+1;});
   const sortedProfs26=Object.entries(profCount26).sort((a,b)=>b[1]-a[1]).slice(0,20);
   const profs26=sortedProfs26.map(p=>p[0]);
   const pvals26=sortedProfs26.map(p=>p[1]);
+  destroyChart('c26-prof');
   new Chart(document.getElementById('c26-prof'),{type:'bar',data:{labels:profs26,datasets:[{data:pvals26,backgroundColor:pvals26.map(v=>v>=5?'#7a2845':v>=3?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx,stepSize:1}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
-  new Chart(document.getElementById('c26-media'),{type:'bar',data:{labels:['일간지','KBS','한국일보','전문지','서울신문','매일경제','일간지헬스','헬스경향','중앙일보','EBS','조선일보','뉴스1'],datasets:[{data:[25,11,10,9,8,8,8,7,7,4,4,4],backgroundColor:'#1a3a6b',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:12}}}}}});
+  const mediaCnt26={};
+  d26all.forEach(r=>{const m=r[6];if(m)mediaCnt26[m]=(mediaCnt26[m]||0)+1;});
+  const sMedia26=Object.entries(mediaCnt26).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  destroyChart('c26-media');
+  new Chart(document.getElementById('c26-media'),{type:'bar',data:{labels:sMedia26.map(m=>m[0]),datasets:[{data:sMedia26.map(m=>m[1]),backgroundColor:'#1a3a6b',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:12}}}}}});
+
+  // 2026 메트릭 카드 동적 업데이트
+  const lastMo26=months.length?months[months.length-1]:'?';
+  const avg26=months.length?(total26cnt/months.length).toFixed(1):'-';
+  const topStaff=sStaff26[0]||['?',0];
+  const topDept=sDept26[0]||['?',0];
+  const topProfArr=sortedProfs26[0]||['?',0];
+  document.getElementById('y26-total').innerHTML=total26cnt+'<span class="munit">건</span>';
+  document.getElementById('y26-total-sub').textContent='1~'+lastMo26+'월 기준';
+  document.getElementById('y26-avg').innerHTML=avg26+'<span class="munit">건</span>';
+  document.getElementById('y26-avg-sub').textContent='월 평균 (연환산 '+(Math.round(avg26*12))+'건)';
+  document.getElementById('y26-top-staff-label').textContent='최다 담당 ('+topStaff[0]+')';
+  document.getElementById('y26-top-staff').innerHTML=topStaff[1]+'<span class="munit">건</span>';
+  document.getElementById('y26-top-staff-sub').textContent='전체의 '+Math.round(topStaff[1]/total26cnt*100)+'%';
+  document.getElementById('y26-top-dept-label').textContent='최다 진료과 ('+topDept[0]+')';
+  document.getElementById('y26-top-dept').innerHTML=topDept[1]+'<span class="munit">건</span>';
+  document.getElementById('y26-top-prof-label').textContent='최다 교수 ('+topProfArr[0]+')';
+  document.getElementById('y26-top-prof').innerHTML=topProfArr[1]+'<span class="munit">건</span>';
 }
 
 /* ── 연도 필터 (진료과) ── */
@@ -705,14 +822,18 @@ function drawDept(){
 
 /* ── 담당자 ── */
 function drawStaff(){
-  new Chart(document.getElementById('c-staff-trend'),{type:'line',data:{labels:['2021','2022','2023','2024','2025','2026'],datasets:[
-    {label:'최영주',data:[32,68,55,58,45,20],borderColor:'#2d6a4f',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#2d6a4f'},
-    {label:'전영은',data:[18,30,38,35,40,15],borderColor:'#1a3a6b',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#1a3a6b',borderDash:[5,3]},
-    {label:'박준규',data:[2,5,8,15,38,30],borderColor:'#b5601a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#b5601a'},
-    {label:'오혜성',data:[20,30,22,25,35,14],borderColor:'#7a2845',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#7a2845',borderDash:[3,3]},
-    {label:'이다예',data:[28,35,20,25,18,5],borderColor:'#5b4a8a',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#5b4a8a'},
-    {label:'민경준',data:[22,38,30,28,10,0],borderColor:'#888780',fill:false,tension:.4,pointRadius:4,pointBackgroundColor:'#888780',borderDash:[2,2]},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
+  // 담당자별 연도별 집계
+  const staffYrMap={};
+  ALL_DATA.forEach(r=>{
+    const s=r[3],y=String(r[0]);
+    if(s&&YKEYS.includes(y)){if(!staffYrMap[s])staffYrMap[s]={};staffYrMap[s][y]=(staffYrMap[s][y]||0)+1;}
+  });
+  // 총 건수 기준 상위 6명
+  const top6Staff=Object.entries(staffYrMap).sort((a,b)=>Object.values(b[1]).reduce((x,v)=>x+v,0)-Object.values(a[1]).reduce((x,v)=>x+v,0)).slice(0,6);
+  const SCOLS=['#2d6a4f','#1a3a6b','#b5601a','#7a2845','#5b4a8a','#888780'];
+  const DASHES=[[],[5,3],[],[3,3],[],[2,2]];
+  destroyChart('c-staff-trend');
+  new Chart(document.getElementById('c-staff-trend'),{type:'line',data:{labels:['2021','2022','2023','2024','2025','2026'],datasets:top6Staff.map(([name,yrData],i)=>({label:name,data:YKEYS.map(y=>yrData[y]||0),borderColor:SCOLS[i],fill:false,tension:.4,pointRadius:4,pointBackgroundColor:SCOLS[i],borderDash:DASHES[i]}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:tx}},y:{grid:{color:gr},ticks:{color:tx},beginAtZero:true}}}});
 
   // 초기 테이블 렌더
   renderTable();
