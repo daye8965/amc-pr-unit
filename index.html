@@ -121,6 +121,11 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 .ybtn:hover{border-color:var(--green);color:var(--green)}
 .ybtn.active{background:var(--green);color:#fff;border-color:var(--green)}
 
+/* 업무량 탭 연도 필터 버튼 (.ybtn 과 분리: 필터 상태가 섞이지 않게) */
+.wbtn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
+.wbtn:hover{border-color:var(--blue);color:var(--blue)}
+.wbtn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
 /* 담당자 선택 버튼 */
 .staff-sel-btn{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
 .staff-sel-btn:hover{border-color:var(--blue);color:var(--blue)}
@@ -196,6 +201,7 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
   <button class="tab" onclick="show(&#39;y2026&#39;)">🔆 2026년 상세</button>
   <button class="tab" onclick="show(&#39;dept&#39;)">🏥 진료과 분석</button>
   <button class="tab" onclick="show(&#39;staff&#39;)">👥 담당자 현황</button>
+  <button class="tab" onclick="show(&#39;workload&#39;)">⚖️ 업무량 분석</button>
   <button class="tab" onclick="show(&#39;terms&#39;)">🔍 키워드 · 브랜딩</button>
 </nav>
 
@@ -445,6 +451,47 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
   </div>
 </section>
 
+<!-- ⑥ 업무량 분석 -->
+<section class="sec" id="sec-workload">
+  <div class="mrow" id="wl-metrics"></div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="ctitle">기간 선택</div>
+        <div class="csub" style="margin-bottom:0">선택한 연도 기준으로 아래 지표·차트·표가 모두 다시 계산됩니다</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="wl-yr-btns"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">담당자별 업무량 (업무 유형 누적)</div>
+    <div class="csub">막대 길이 = 처리 건수, 색 = 업무 유형. 공동 담당 건은 참여자 각자에게 1건씩 집계합니다</div>
+    <div class="cwrap" id="wl-staff-wrap" style="height:420px"><canvas id="c-wl-staff" role="img" aria-label="담당자별 업무량 누적 막대 차트"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">업무 유형별 분포</div>
+    <div class="csub">유닛 전체 업무가 어떤 유형으로 구성되는지</div>
+    <div class="cwrap" style="height:300px"><canvas id="c-wl-type" role="img" aria-label="업무 유형별 분포 도넛 차트"></canvas></div>
+    <div id="wl-type-bars" style="margin-top:1.25rem;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">담당자 × 업무 유형 교차표</div>
+    <div class="csub">건수 기준. 담당자별 업무 구성(가로 방향)과 유형별 인력 배분(세로 방향)을 같이 봅니다</div>
+    <div style="overflow-x:auto">
+      <table id="wl-table" style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead id="wl-thead"></thead>
+        <tbody id="wl-tbody"></tbody>
+      </table>
+      <div id="wl-empty" style="display:none;text-align:center;padding:2rem;color:var(--text3);font-size:13px">해당 기간의 데이터가 없습니다</div>
+    </div>
+    <div id="wl-note" style="margin-top:1rem;font-size:12px;color:var(--text3);line-height:1.6"></div>
+  </div>
+</section>
+
 <!-- ⑤ 키워드·브랜딩 -->
 <section class="sec" id="sec-terms">
   <div class="card">
@@ -484,17 +531,37 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 <script>
 const gr='rgba(0,0,0,0.06)',tx='#6b6b65';
 const drawn={};
-const tabOrder=['overview','compare','y2026','dept','staff','terms'];
-const tabNames=['전체 현황','연도별 비교','2026년 상세','진료과 분석','담당자 현황','키워드·브랜딩'];
+const tabOrder=['overview','compare','y2026','dept','staff','workload','terms'];
+const tabNames=['전체 현황','연도별 비교','2026년 상세','진료과 분석','담당자 현황','업무량 분석','키워드·브랜딩'];
 
 // Google Sheets 데이터 로드
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnDpYwXnzNtfs7zCl-HY-AitPOfiyw503RjaRm3lQv73Hn_r9Ry-zs0IQdC8x1pEnC1Q/exec';
 let ALL_DATA = [];
 
+async function fetchSheetWithRetry(tries) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(GOOGLE_APPS_SCRIPT_URL, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json)) return json;
+        last = new Error('배열이 아닌 응답');
+      } else {
+        last = new Error('HTTP ' + res.status);
+      }
+    } catch (e) {
+      last = e;
+    }
+    if (i < tries - 1) await new Promise(r => setTimeout(r, 700 * (i + 1)));
+  }
+  throw last;
+}
+
 async function loadGoogleSheetsData() {
   try {
-    const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
-    const data = await response.json();
+    // Apps Script 엔드포인트가 간헐적으로 404(HTML 오류 페이지)를 돌려주므로 재시도
+    const data = await fetchSheetWithRetry(3);
     const raw = data.map(row => [
       row.year,
       row.month,
@@ -505,16 +572,18 @@ async function loadGoogleSheetsData() {
       row.media,
       row.doctor
     ]);
+    // 시트 헤더행(년도/월/구분...)이 데이터로 섞여 들어오므로 제거
+    const body = raw.filter(r => /^\d{4}$/.test(String(r[0])));
     // 보도자료 중복 제거: 같은 년+월+제목이면 1건으로 집계
     const seenPR = new Set();
-    ALL_DATA = raw.filter(r => {
+    ALL_DATA = body.filter(r => {
       if (r[2] !== '보도자료') return true;
       const key = String(r[0]) + '|' + String(r[1]) + '|' + String(r[4]||'').trim();
       if (seenPR.has(key)) return false;
       seenPR.add(key);
       return true;
     });
-    console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건)');
+    console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건, 헤더행 제외 후:', body.length, '건)');
     // 데이터 로드 후 필요한 초기화
     initDashboard();
   } catch (error) {
@@ -561,8 +630,11 @@ async function startPdf(){
       pdf.setFont('helvetica','normal');
       const today=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
       pdf.text(today,W-8,8,{align:'right'});
-      const imgW=W-16,imgH=(canvas.height/canvas.width)*imgW,finalH=Math.min(imgH,H-20);
-      pdf.addImage(imgData,'PNG',8,14,imgW,finalH,'','FAST');
+      // 세로로 긴 탭도 비율을 유지한 채 한 페이지에 맞춘다 (예전엔 높이만 잘라 그림이 눌렸음)
+      const maxW=W-16,maxH=H-20;
+      let imgW=maxW,imgH=(canvas.height/canvas.width)*imgW;
+      if(imgH>maxH){imgH=maxH;imgW=(canvas.width/canvas.height)*imgH;}
+      pdf.addImage(imgData,'PNG',(W-imgW)/2,14,imgW,imgH,'','FAST');
       pdf.setTextColor(150,150,140);pdf.setFontSize(8);pdf.text(`${i+1} / ${targets.length}`,W/2,H-3,{align:'center'});
     }
     setMsg('저장 중...');
@@ -592,6 +664,7 @@ function show(name){
     if(name==='y2026')draw2026();
     if(name==='dept')drawDept();
     if(name==='staff')drawStaff();
+    if(name==='workload')drawWorkload();
     if(name==='terms')drawTerms();
     drawn[name]=true;
   }
@@ -846,6 +919,150 @@ function drawStaff(){
 
   // 초기 테이블 렌더
   renderTable();
+}
+
+/* ── 업무량 분석 ── */
+let wlYr='전체';
+const WL_COLORS=['#2d6a4f','#1a3a6b','#b5601a','#7a2845','#5b4a8a','#0ea5e9','#059669','#d97706','#ec4899','#888780'];
+const WL_TOP_TYPES=9;                       // 상위 유형만 개별 표시, 나머지는 '그 외'로 묶음
+const WL_TEAM_LABEL='유닛 공통';
+const WL_TEAM_NAMES=['유닛공통','유닛 공통','다같이','전체','공통'];
+const WL_NON_PERSON=[WL_TEAM_LABEL,'미상'];  // 1인 평균 계산에서 제외
+
+function wlColor(t,i){return TYPE_BG[t]||WL_COLORS[i%WL_COLORS.length];}
+
+// 담당 셀에는 공동 담당이 줄바꿈/공백으로 여러 명 들어있고, 오타(.문지애)도 섞여 있음
+function wlStaffNames(raw){
+  const out=[];
+  String(raw||'').split(/[\s,\/·]+/).forEach(v=>{
+    const n=v.replace(/^[.·]+/,'').replace(/[.·]+$/,'').trim();
+    if(!n)return;
+    const name=WL_TEAM_NAMES.includes(n)?WL_TEAM_LABEL:n;
+    if(!out.includes(name))out.push(name);
+  });
+  return out.length?out:['미상'];
+}
+
+function wlAgg(){
+  const rows=ALL_DATA.filter(r=>wlYr==='전체'||String(r[0])===wlYr);
+  // 유형 상위 N개만 개별 표시 (시트에 20종 이상 있어 그대로 두면 차트가 읽히지 않음)
+  const rawType={};
+  rows.forEach(r=>{const t=String(r[2]||'').trim()||'기타';rawType[t]=(rawType[t]||0)+1;});
+  const keep=new Set(Object.keys(rawType).sort((a,b)=>rawType[b]-rawType[a]).slice(0,WL_TOP_TYPES));
+  const grp=t=>keep.has(t)?t:'그 외';
+
+  const typeTotal={},staffTotal={},cross={};
+  let assign=0;   // 담당 배정 건수: 공동 담당은 각자 1건
+  rows.forEach(r=>{
+    const t=grp(String(r[2]||'').trim()||'기타');
+    typeTotal[t]=(typeTotal[t]||0)+1;
+    wlStaffNames(r[3]).forEach(s=>{
+      assign++;
+      staffTotal[s]=(staffTotal[s]||0)+1;
+      if(!cross[s])cross[s]={};
+      cross[s][t]=(cross[s][t]||0)+1;
+    });
+  });
+
+  const types=Object.keys(typeTotal).sort((a,b)=>(a==='그 외')-(b==='그 외')||typeTotal[b]-typeTotal[a]);
+  const staffs=Object.keys(staffTotal).sort((a,b)=>
+    (WL_NON_PERSON.includes(a)-WL_NON_PERSON.includes(b))||staffTotal[b]-staffTotal[a]);
+  const people=staffs.filter(s=>!WL_NON_PERSON.includes(s));
+  const personAssign=people.reduce((n,s)=>n+staffTotal[s],0);
+  return {types,staffs,people,typeTotal,staffTotal,cross,total:rows.length,assign,personAssign};
+}
+
+function wlYears(){
+  return [...new Set(ALL_DATA.map(r=>String(r[0])))].filter(y=>/^\d{4}$/.test(y)).sort();
+}
+
+function setWlYr(yr){
+  wlYr=yr;
+  document.querySelectorAll('#wl-yr-btns .wbtn').forEach(b=>b.classList.toggle('active',b.textContent===yr));
+  drawWorkload();
+}
+
+function drawWorkload(){
+  // 연도 버튼은 시트에 실제로 있는 연도로 생성 (없는 연도 버튼을 눌러 빈 화면이 되는 일 방지)
+  const btns=document.getElementById('wl-yr-btns');
+  if(!btns.children.length){
+    btns.innerHTML=['전체'].concat(wlYears()).map(y=>
+      '<button class="wbtn'+(y===wlYr?' active':'')+'" onclick="setWlYr(\''+y+'\')">'+y+'</button>').join('');
+  }
+
+  const a=wlAgg();
+  const pctT=n=>a.total?Math.round(n/a.total*100):0;        // 건수 대비
+  const pctA=n=>a.assign?Math.round(n/a.assign*100):0;      // 담당 배정 대비
+
+  /* 지표 카드 */
+  const topStaff=a.people[0], topType=a.types[0];
+  const headcount=a.people.length;
+  const avg=headcount?(a.personAssign/headcount):0;
+  const label=wlYr==='전체'?'전체 기간':wlYr+'년';
+  document.getElementById('wl-metrics').innerHTML=
+    '<div class="mc g"><div class="mlabel">총 업무 건수</div><div class="mval">'+a.total+'<span class="munit">건</span></div><div class="msub">'+label+'</div></div>'+
+    '<div class="mc b"><div class="mlabel">담당 인원</div><div class="mval">'+headcount+'<span class="munit">명</span></div><div class="msub">해당 기간 실적 있는 인원</div></div>'+
+    '<div class="mc a"><div class="mlabel">1인 평균</div><div class="mval">'+avg.toFixed(1)+'<span class="munit">건</span></div><div class="msub">공동 담당은 각자 1건으로 집계</div></div>'+
+    '<div class="mc p"><div class="mlabel">최다 담당자</div><div class="mval" style="font-size:1.6rem">'+(topStaff||'-')+'</div><div class="msub">'+(topStaff?a.staffTotal[topStaff]+'건 · 배정의 '+pctA(a.staffTotal[topStaff])+'%':'데이터 없음')+'</div></div>'+
+    '<div class="mc t"><div class="mlabel">최다 업무 유형</div><div class="mval" style="font-size:1.6rem">'+(topType||'-')+'</div><div class="msub">'+(topType?a.typeTotal[topType]+'건 · 전체의 '+pctT(a.typeTotal[topType])+'%':'데이터 없음')+'</div></div>';
+
+  /* 담당자별 누적 막대 */
+  document.getElementById('wl-staff-wrap').style.height=Math.max(260,a.staffs.length*34+70)+'px';
+  destroyChart('c-wl-staff');
+  new Chart(document.getElementById('c-wl-staff'),{
+    type:'bar',
+    data:{labels:a.staffs,datasets:a.types.map((t,i)=>({label:t,data:a.staffs.map(s=>a.cross[s][t]||0),backgroundColor:wlColor(t,i),borderWidth:0}))},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x+'건'}}},
+      scales:{x:{stacked:true,grid:{color:gr},ticks:{color:tx},beginAtZero:true},y:{stacked:true,grid:{display:false},ticks:{color:tx}}}}
+  });
+
+  /* 업무 유형 분포 */
+  destroyChart('c-wl-type');
+  new Chart(document.getElementById('c-wl-type'),{
+    type:'doughnut',
+    data:{labels:a.types,datasets:[{data:a.types.map(t=>a.typeTotal[t]),backgroundColor:a.types.map((t,i)=>wlColor(t,i)),borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',animation:false,
+      plugins:{legend:{position:'right',labels:{color:tx,font:{size:11},padding:10,boxWidth:12}},
+        tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'건 ('+pctT(c.parsed)+'%)'}}}}
+  });
+
+  const maxType=a.types.length?Math.max.apply(null,a.types.map(t=>a.typeTotal[t])):0;
+  document.getElementById('wl-type-bars').innerHTML=a.types.map((t,i)=>
+    '<div class="scard" style="padding:.75rem 1rem">'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px">'+
+        '<span style="font-weight:600">'+t+'</span>'+
+        '<span style="color:var(--text3)">'+a.typeTotal[t]+'건 · '+pctT(a.typeTotal[t])+'%</span>'+
+      '</div>'+
+      '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">'+
+        '<div style="height:100%;border-radius:4px;width:'+(maxType?a.typeTotal[t]/maxType*100:0)+'%;background:'+wlColor(t,i)+'"></div>'+
+      '</div>'+
+    '</div>').join('');
+
+  /* 교차표 */
+  const th=v=>'<th style="padding:8px 10px;text-align:right;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">'+v+'</th>';
+  document.getElementById('wl-thead').innerHTML=
+    '<tr style="border-bottom:2px solid var(--border)">'+
+      '<th style="padding:8px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap">담당자</th>'+
+      a.types.map(th).join('')+th('합계')+th('비중')+
+    '</tr>';
+  const td=(v,b)=>'<td style="padding:8px 10px;text-align:right;white-space:nowrap'+(b?';font-weight:700':'')+'">'+v+'</td>';
+  document.getElementById('wl-tbody').innerHTML=a.staffs.map(s=>
+    '<tr style="border-bottom:1px solid var(--border)">'+
+      '<td style="padding:8px 10px;font-weight:600;white-space:nowrap">'+s+'</td>'+
+      a.types.map(t=>td(a.cross[s][t]?a.cross[s][t]:'<span style="color:var(--text3)">·</span>')).join('')+
+      td(a.staffTotal[s],true)+td(pctA(a.staffTotal[s])+'%')+
+    '</tr>').join('')+
+    (a.staffs.length?'<tr style="border-top:2px solid var(--border)">'+
+      '<td style="padding:8px 10px;font-weight:700;white-space:nowrap">합계</td>'+
+      a.types.map(t=>td(a.typeTotal[t],true)).join('')+td(a.assign,true)+td('100%',true)+
+    '</tr>':'');
+  document.getElementById('wl-empty').style.display=a.staffs.length?'none':'block';
+  document.getElementById('wl-table').style.display=a.staffs.length?'table':'none';
+  document.getElementById('wl-note').innerHTML=
+    '총 업무 '+a.total+'건 · 담당 배정 '+a.assign+'건 (공동 담당 건은 참여자 각자에게 1건씩 집계되어 합계가 총 건수보다 큽니다). '+
+    '유형은 상위 '+WL_TOP_TYPES+'종만 개별 표시하고 나머지는 <strong>그 외</strong>로 묶었습니다.';
 }
 
 /* ── 전체 데이터 + 담당자 필터 ── */
