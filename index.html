@@ -1292,13 +1292,18 @@ function setStaffFilter(name){
 function setTypeFilter(type){
   curType=type==='전체'?'전체':type;
   renderTable();
-  // 구분 필터 버튼 활성화/비활성화 표시
+}
+
+/** 구분 버튼 활성화 표시 + 뒤로가기 버튼. renderTable 이 그린 뒤에 부릅니다.
+    (예전에는 renderTable 이 setTypeFilter 를 도로 불러 무한 재귀로 터졌습니다) */
+function applyTypeBtnStyles(){
   document.querySelectorAll('[data-type-btn]').forEach(btn=>{
     const isActive = btn.getAttribute('data-type-btn') === curType;
     if(isActive){
       btn.style.background = 'var(--blue)';
       btn.style.color = '#fff';
       btn.style.borderColor = 'var(--blue)';
+      btn.style.opacity = '1';
     } else {
       btn.style.background = 'transparent';
       btn.style.color = curType==='전체' ? 'var(--text2)' : 'var(--text3)';
@@ -1306,34 +1311,33 @@ function setTypeFilter(type){
       btn.style.opacity = curType==='전체' ? '1' : '0.5';
     }
   });
-  // 뒤로가기 버튼 표시
   document.getElementById('type-filter-reset').style.display = curType==='전체' ? 'none' : 'block';
 }
 
 function renderTable(){
-  let rows=ALL_DATA.filter(r=>{
+  // 담당자·연도까지만 적용한 집합. 구분 버튼은 이걸로 만들어야
+  // 한 구분을 고른 뒤에도 다른 구분이 목록에 남아 바로 바꿀 수 있습니다.
+  const baseRows=ALL_DATA.filter(r=>{
     const staff=String(r[3]||'').trim();
-    const type=String(r[2]||'').trim();
     const sm=curStaff==='전체'||staff===curStaff;
     const ym=curYr==='전체'||String(r[0])===curYr;
-    const tm=curType==='전체'||type===curType;
-    return sm&&ym&&tm;
+    return sm&&ym;
   });
+  let rows=curType==='전체'?baseRows:baseRows.filter(r=>String(r[2]||'').trim()===curType);
+
   const tbody=document.getElementById('staff-tbody');
   const empty=document.getElementById('staff-empty');
-  const total=rows.length;
   const tc={};
-  rows.forEach(r=>{tc[r[2]]=(tc[r[2]]||0)+1;});
-  document.getElementById('sum-total').textContent=total;
+  baseRows.forEach(r=>{tc[r[2]]=(tc[r[2]]||0)+1;});
+  document.getElementById('sum-total').textContent=baseRows.length;
   const typeButtons = Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<button data-type-btn="${k}" onclick="setTypeFilter('${k}')" style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:500;font-size:12px;font-family:'Noto Sans KR',sans-serif;background:transparent;color:var(--text2);transition:all .2s">${k} ${v}건</button>`).join('');
   document.getElementById('sum-types').innerHTML = typeButtons || '<span style="color:var(--text3)">데이터 없음</span>';
-  // 초기 활성화 상태 설정
-  if(curType !== '전체'){
-    setTypeFilter(curType);
-  }
+  applyTypeBtnStyles();
+
   if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
-  rows.sort((a,b)=>a[0]!==b[0]?b[0]-a[0]:parseInt(b[1]||0)-parseInt(a[1]||0));
+  const mon=v=>{const n=parseInt(v,10);return isNaN(n)?0:n;};   // '미정'·'장기' 는 맨 뒤로
+  rows.sort((a,b)=>a[0]!==b[0]?b[0]-a[0]:mon(b[1])-mon(a[1]));
   tbody.innerHTML=rows.map(r=>{
     const [yr,mo,type,staff,title,dept,media]=r;
     const tc2=TYPE_COLOR[type]||'기타';
