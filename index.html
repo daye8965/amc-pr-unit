@@ -129,8 +129,6 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 .tl-grid{position:absolute;top:0;bottom:0;width:1px;background:var(--border)}
 .tl-yr{position:absolute;top:0;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:.04em}
 .tl-bar{position:absolute;top:3px;height:16px;border-radius:3px;display:flex;align-items:center;padding:0 5px;font-size:10px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden}
-.tl-mark{position:absolute;top:3px;height:16px;width:3px;border-radius:2px}
-.tl-mlabel{position:absolute;top:5px;font-size:10px;font-weight:600;white-space:nowrap}
 .tl-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--text2)}
 .tl-chip{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 
@@ -970,42 +968,41 @@ function drawStaff(){
 /* ── 담당자 인사 이력 ──
    시트에 없는 정보라 여기에 직접 적습니다. 새 이력이 생기면 이 배열에만 추가하면
    담당자 현황 탭 타임라인과 업무량 탭 메모가 같이 갱신됩니다.
-   기간이 '2022~2024년'처럼 월 없이 주어진 건은 1월~12월로 봤습니다. */
+   기간이 '2022~2024년'처럼 월 없이 주어진 건은 1월~12월로 봤습니다.
+   to 가 null 이면 '그 달부터 계속'이라는 뜻이고 타임라인 오른쪽 끝까지 그립니다. */
 const TL_FROM_YEAR=2021, TL_TO_YEAR=2026;
 const TL_KINDS={
   '휴직':    {color:'#d97706'},
-  '한시업무':{color:'#0ea5e9'},
   '파견':    {color:'#7a2845'},
   '대체인력':{color:'#5b4a8a'},
   '합류':    {color:'#2d6a4f'},
   '이동':    {color:'#8b2020'}
 };
 const STAFF_EVENTS=[
-  {staff:'이다예', kind:'휴직',     label:'육아휴직',           from:[2021,3],  to:[2022,5]},
-  {staff:'이다예', kind:'한시업무', label:'한시적 유튜브 제작', from:[2023,1],  to:[2023,12]},
-  {staff:'이다예', kind:'휴직',     label:'육아휴직',           from:[2025,2],  to:[2026,5]},
-  {staff:'박준규', kind:'합류',     label:'언론유닛 합류',      at:[2025,1]},
-  {staff:'김준호', kind:'합류',     label:'언론유닛 합류',      from:[2023,1],  to:[2023,12]},
-  {staff:'민경준', kind:'이동',     label:'병원보유닛 이동',    at:[2025,1]},
-  {staff:'윤주은', kind:'대체인력', label:'대체인력',           from:[2025,3],  to:[2026,8]},
-  {staff:'문지애', kind:'파견',     label:'파견',               from:[2022,1],  to:[2024,12]},
-  {staff:'신윤호', kind:'이동',     label:'부서이동',           at:[2022,1]}
+  {staff:'이다예', kind:'휴직',     label:'육아휴직',        from:[2021,3], to:[2022,5]},
+  {staff:'이다예', kind:'이동',     label:'SNS제작',         from:[2023,1], to:[2023,12]},
+  {staff:'이다예', kind:'휴직',     label:'육아휴직',        from:[2025,2], to:[2026,5]},
+  {staff:'박준규', kind:'합류',     label:'언론유닛 합류',   from:[2025,1], to:null},
+  {staff:'김준호', kind:'합류',     label:'언론유닛 합류',   from:[2023,1], to:[2023,12]},
+  {staff:'민경준', kind:'이동',     label:'병원보유닛 이동', from:[2025,1], to:null},
+  {staff:'윤주은', kind:'대체인력', label:'대체인력',        from:[2025,3], to:[2026,8]},
+  {staff:'문지애', kind:'파견',     label:'파견',            from:[2022,1], to:[2024,12]},
+  {staff:'신윤호', kind:'이동',     label:'부서이동',        from:[2022,1], to:null}
 ];
 
 const TL_MONTHS=(TL_TO_YEAR-TL_FROM_YEAR+1)*12;
 function tlIdx(ym){return (ym[0]-TL_FROM_YEAR)*12+(ym[1]-1);}
 function tlPct(i){return i/TL_MONTHS*100;}
+function tlEndIdx(e){return e.to?tlIdx(e.to):TL_MONTHS-1;}   // 열린 기간은 범위 끝까지
 function tlPeriod(e){
-  if(e.at) return e.at[0]+'년 '+e.at[1]+'월';
-  const a=e.from, b=e.to;
+  const a=e.from;
+  if(!e.to) return a[0]+'년 '+a[1]+'월 ~ 계속';
+  const b=e.to;
   return a[0]+'년 '+a[1]+'월 ~ '+(b[0]===a[0]?b[1]+'월':b[0]+'년 '+b[1]+'월');
 }
 /** 해당 연도에 걸치는 이력 */
 function tlEventsInYear(y){
-  return STAFF_EVENTS.filter(e=>{
-    if(e.at) return e.at[0]===y;
-    return e.from[0]<=y && e.to[0]>=y;
-  });
+  return STAFF_EVENTS.filter(e=>e.from[0]<=y && (e.to?e.to[0]:TL_TO_YEAR)>=y);
 }
 
 function renderStaffEvents(){
@@ -1030,23 +1027,19 @@ function renderStaffEvents(){
     }
     STAFF_EVENTS.filter(e=>e.staff===name).forEach(e=>{
       const c=TL_KINDS[e.kind].color;
-      if(e.at){
-        const l=tlPct(tlIdx(e.at));
-        track+='<div class="tl-mark" title="'+e.label+' ('+tlPeriod(e)+')" style="left:'+l+'%;background:'+c+'"></div>'+
-               '<div class="tl-mlabel" style="left:calc('+l+'% + 7px);color:'+c+'">'+e.label+'</div>';
-      }else{
-        const l=tlPct(tlIdx(e.from)), w=tlPct(tlIdx(e.to)-tlIdx(e.from)+1);
-        track+='<div class="tl-bar" title="'+e.label+' ('+tlPeriod(e)+')" style="left:'+l+'%;width:'+w+'%;background:'+c+'">'+(w>13?e.label:'')+'</div>';
-      }
+      const l=tlPct(tlIdx(e.from)), w=tlPct(tlEndIdx(e)-tlIdx(e.from)+1);
+      track+='<div class="tl-bar" title="'+e.label+' ('+tlPeriod(e)+')" style="left:'+l+'%;width:'+w+'%;background:'+c+'">'+
+             (w>13?e.label+(e.to?'':' →'):'')+'</div>';
     });
     return '<div class="tl-row"><div class="tl-name">'+name+'</div><div class="tl-track">'+track+'</div></div>';
   }).join('');
 
   wrap.innerHTML=axis+rows;
 
-  document.getElementById('tl-legend').innerHTML=Object.keys(TL_KINDS).map(k=>
+  const usedKinds=Object.keys(TL_KINDS).filter(k=>STAFF_EVENTS.some(e=>e.kind===k));
+  document.getElementById('tl-legend').innerHTML=usedKinds.map(k=>
     '<span><span class="tl-chip" style="background:'+TL_KINDS[k].color+'"></span>'+k+'</span>').join('')+
-    '<span style="color:var(--text3)">막대 = 기간, 세로선 = 시점</span>';
+    '<span style="color:var(--text3)">막대 = 해당 기간, → = 계속</span>';
 
   // PDF에서 막대만으로는 안 읽히므로 표도 같이 둡니다
   const th='padding:7px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap';
