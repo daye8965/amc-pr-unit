@@ -218,6 +218,19 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 
 <main class="main">
 
+<!-- 시트를 못 받았을 때 (경고창 대신 화면에 남겨 원인을 보여줍니다) -->
+<div id="load-error" style="display:none;background:#fff4ed;border:1px solid #f0c9a8;border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+  <div style="font-size:14px;font-weight:700;color:#8a4b1a;margin-bottom:6px">실적 데이터를 불러오지 못했습니다</div>
+  <div style="font-size:13px;color:var(--text2);line-height:1.7">
+    Google Sheets 연동(Apps Script)이 응답하지 않습니다. 대부분 잠시 뒤 정상으로 돌아옵니다.
+    <div style="margin-top:8px;font-size:12px;color:var(--text3)">실패 원인: <span id="load-error-reason">-</span></div>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button id="load-retry" onclick="loadGoogleSheetsData()" style="padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;font-family:'Noto Sans KR',sans-serif">다시 시도</button>
+    <a id="load-error-link" href="#" target="_blank" rel="noopener" style="font-size:12px;color:var(--blue)">엔드포인트 직접 열어보기</a>
+  </div>
+</div>
+
 <!-- ① 전체 현황 -->
 <section class="sec active" id="sec-overview">
   <div class="mrow">
@@ -568,7 +581,16 @@ async function fetchSheetWithRetry(tries) {
   let last;
   for (let i = 0; i < tries; i++) {
     try {
-      const res = await fetch(GOOGLE_APPS_SCRIPT_URL, { cache: 'no-store' });
+      // 응답이 영영 안 오는 경우가 있어 시도마다 8초에서 끊습니다.
+      // 안 끊으면 화면이 빈 채로 멈춰 있고 오류 안내도 못 띄웁니다.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 8000);
+      let res;
+      try {
+        res = await fetch(GOOGLE_APPS_SCRIPT_URL, { cache: 'no-store', signal: ctrl.signal });
+      } finally {
+        clearTimeout(timer);
+      }
       if (res.ok) {
         const json = await res.json();
         if (Array.isArray(json)) return json;
@@ -577,7 +599,7 @@ async function fetchSheetWithRetry(tries) {
         last = new Error('HTTP ' + res.status);
       }
     } catch (e) {
-      last = e;
+      last = (e && e.name === 'AbortError') ? new Error('응답 없음 (8초 초과)') : e;
     }
     // 404가 몇 초씩 연달아 나는 일이 있어 점점 길게 기다립니다 (0.8 / 1.6 / 3.2 / 6.4초)
     if (i < tries - 1) await new Promise(r => setTimeout(r, 800 * Math.pow(2, i)));
@@ -586,6 +608,8 @@ async function fetchSheetWithRetry(tries) {
 }
 
 async function loadGoogleSheetsData() {
+  const btn = document.getElementById('load-retry');
+  if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
   try {
     // Apps Script 엔드포인트가 간헐적으로 404(HTML 오류 페이지)를 돌려주므로 재시도
     const data = await fetchSheetWithRetry(5);
@@ -613,10 +637,33 @@ async function loadGoogleSheetsData() {
     console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건, 헤더행 제외 후:', body.length, '건)');
     // 데이터 로드 후 필요한 초기화
     initDashboard();
+    showLoadError(null);
   } catch (error) {
     console.error('Google Sheets 데이터 로드 실패:', error);
-    alert('데이터를 불러올 수 없습니다. 인터넷 연결을 확인하세요.');
+    showLoadError(error);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '다시 시도'; }
   }
+}
+
+/**
+ * err 가 있으면 배너를 띄우고, null 이면 감춥니다.
+ * 예전에는 alert('인터넷 연결을 확인하세요')를 띄웠는데, 인터넷이 아니라
+ * 시트 쪽이 막힌 경우가 대부분이라 실제 원인을 화면에 남깁니다.
+ */
+function showLoadError(err) {
+  const box = document.getElementById('load-error');
+  if (!box) return;
+  if (!err) { box.style.display = 'none'; return; }
+
+  const msg = String(err && err.message || err);
+  document.getElementById('load-error-reason').textContent =
+    msg.indexOf('HTTP') === 0
+      ? msg + ' — 배포가 지워졌거나, 짧은 시간에 요청이 몰려 일시적으로 막힌 상태입니다'
+      : msg;
+  const link = document.getElementById('load-error-link');
+  link.href = GOOGLE_APPS_SCRIPT_URL;
+  box.style.display = 'block';
 }
 
 // 페이지 로드 시 데이터 가져오기
