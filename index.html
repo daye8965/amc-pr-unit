@@ -779,8 +779,9 @@ function drawOverview(){
   // 역대 최다 (2026 제외)
   const maxIdx=totals.slice(0,5).reduce((mi,v,i,arr)=>v>arr[mi]?i:mi,0);
 
-  // 참여 담당자
-  const staffSet=new Set(ALL_DATA.map(r=>r[3]).filter(Boolean));
+  // 참여 담당자 (공동 담당은 각자 1명으로)
+  const staffSet=new Set();
+  ALL_DATA.forEach(r=>staffNames(r[3]).forEach(n=>staffSet.add(n)));
 
   // 2026 YTD 최신 월
   const months26=[...new Set(ALL_DATA.filter(r=>String(r[0])==='2026').map(r=>r[1]))].sort((a,b)=>Number(a)-Number(b));
@@ -891,7 +892,7 @@ function draw2026(){
 
   // 담당자별 건수
   const staffCnt26={};
-  d26all.forEach(r=>{const s=r[3];if(s)staffCnt26[s]=(staffCnt26[s]||0)+1;});
+  d26all.forEach(r=>staffNames(r[3]).forEach(s=>{staffCnt26[s]=(staffCnt26[s]||0)+1;}));
   const sStaff26=Object.entries(staffCnt26).sort((a,b)=>b[1]-a[1]);
   const sNames26=sStaff26.map(s=>s[0]),sVals26=sStaff26.map(s=>s[1]);
   const SCOL=['#1a3a6b','#2d6a4f','#b5601a','#7a2845','#5b4a8a','#888780'];
@@ -900,7 +901,13 @@ function draw2026(){
 
   // 담당자별 구분 스택
   const staffType26={};
-  d26all.forEach(r=>{const s=r[3],t=r[2]||'기타';const ty=TYPES_ORDER.includes(t)?t:'기타';if(s){if(!staffType26[s])staffType26[s]={};staffType26[s][ty]=(staffType26[s][ty]||0)+1;}});
+  d26all.forEach(r=>{
+    const t=r[2]||'기타', ty=TYPES_ORDER.includes(t)?t:'기타';
+    staffNames(r[3]).forEach(s=>{
+      if(!staffType26[s])staffType26[s]={};
+      staffType26[s][ty]=(staffType26[s][ty]||0)+1;
+    });
+  });
   destroyChart('c26-staff-type');
   new Chart(document.getElementById('c26-staff-type'),{type:'bar',data:{labels:sNames26,datasets:TYPES_ORDER.map(t=>({label:t,data:sNames26.map(s=>(staffType26[s]&&staffType26[s][t])||0),backgroundColor:TYPE_BG[t],borderRadius:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:8,boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx}},y:{stacked:true,grid:{color:gr},ticks:{color:tx}}}}});
 
@@ -997,8 +1004,12 @@ function drawStaff(){
   // 담당자별 연도별 집계
   const staffYrMap={};
   ALL_DATA.forEach(r=>{
-    const s=r[3],y=String(r[0]);
-    if(s&&YKEYS.includes(y)){if(!staffYrMap[s])staffYrMap[s]={};staffYrMap[s][y]=(staffYrMap[s][y]||0)+1;}
+    const y=String(r[0]);
+    if(!YKEYS.includes(y))return;
+    staffNames(r[3]).forEach(s=>{
+      if(!staffYrMap[s])staffYrMap[s]={};
+      staffYrMap[s][y]=(staffYrMap[s][y]||0)+1;
+    });
   });
   // 총 건수 기준 상위 6명
   const top6Staff=Object.entries(staffYrMap).sort((a,b)=>Object.values(b[1]).reduce((x,v)=>x+v,0)-Object.values(a[1]).reduce((x,v)=>x+v,0)).slice(0,6);
@@ -1116,8 +1127,10 @@ const WL_NON_PERSON=[WL_TEAM_LABEL,'미상'];  // 1인 평균 계산에서 제�
 
 function wlColor(t,i){return TYPE_BG[t]||WL_COLORS[i%WL_COLORS.length];}
 
-// 담당 셀에는 공동 담당이 줄바꿈/공백으로 여러 명 들어있고, 오타(.문지애)도 섞여 있음
-function wlStaffNames(raw){
+// 담당 셀에는 공동 담당이 줄바꿈/공백으로 여러 명 들어있고, 오타(.문지애)도 섞여 있음.
+// 사람 단위로 세는 곳은 전부 이걸 거칩니다. 문자열 그대로 쓰면 '박준규 최영주'가
+// 한 사람처럼 잡혀서 차트에 유령 담당자가 생깁니다.
+function staffNames(raw){
   const out=[];
   String(raw||'').split(/[\s,\/·]+/).forEach(v=>{
     const n=v.replace(/^[.·]+/,'').replace(/[.·]+$/,'').trim();
@@ -1141,7 +1154,7 @@ function wlAgg(){
   rows.forEach(r=>{
     const t=grp(String(r[2]||'').trim()||'기타');
     typeTotal[t]=(typeTotal[t]||0)+1;
-    wlStaffNames(r[3]).forEach(s=>{
+    staffNames(r[3]).forEach(s=>{
       assign++;
       staffTotal[s]=(staffTotal[s]||0)+1;
       if(!cross[s])cross[s]={};
@@ -1318,8 +1331,8 @@ function renderTable(){
   // 담당자·연도까지만 적용한 집합. 구분 버튼은 이걸로 만들어야
   // 한 구분을 고른 뒤에도 다른 구분이 목록에 남아 바로 바꿀 수 있습니다.
   const baseRows=ALL_DATA.filter(r=>{
-    const staff=String(r[3]||'').trim();
-    const sm=curStaff==='전체'||staff===curStaff;
+    // 공동 담당 행도 참여자 각자의 목록에 나와야 합니다
+    const sm=curStaff==='전체'||staffNames(r[3]).includes(curStaff);
     const ym=curYr==='전체'||String(r[0])===curYr;
     return sm&&ym;
   });
