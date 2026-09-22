@@ -411,7 +411,8 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
   <!-- 인사 이력: 위 추이가 꺾이는 구간을 설명하는 자리 -->
   <div class="card">
     <div class="ctitle">담당자 인사 이력</div>
-    <div class="csub">휴직·파견·유닛 이동 기간. 위 추이에서 건수가 비는 구간은 대부분 여기에 이유가 있습니다</div>
+    <div class="csub">휴직·파견·유닛 이동 기간. 위 추이에서 건수가 비는 구간은 대부분 여기에 이유가 있습니다.
+      다만 진행하던 인터뷰 등이 뒤늦게 게재되면 휴직 시작 뒤에도 실적이 잡히므로, 기간과 건수가 딱 떨어지지는 않습니다</div>
     <div id="tl-wrap"></div>
     <div class="tl-legend" id="tl-legend"></div>
     <div id="tl-table" style="margin-top:1.25rem"></div>
@@ -1171,7 +1172,7 @@ function renderWlEvents(){
   const list=wlYr==='전체'?STAFF_EVENTS:tlEventsInYear(Number(wlYr));
   document.getElementById('wl-events-sub').textContent=
     (wlYr==='전체'?'전체 기간':wlYr+'년')+' · '+list.length+'건'+
-    (list.length?' — 휴직·파견·이동이 겹친 담당자는 건수가 낮게 잡힙니다':'');
+    (list.length?' — 겹친 담당자는 건수가 낮게 잡힙니다. 진행하던 건이 뒤늦게 게재되면 기간과 정확히 맞지는 않습니다':'');
   document.getElementById('wl-events').innerHTML=list.length
     ? '<div style="display:flex;flex-wrap:wrap;gap:8px">'+list.map(e=>
         '<div class="scard" style="padding:.6rem .85rem;font-size:12px">'+
