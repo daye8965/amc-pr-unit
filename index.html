@@ -361,10 +361,10 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
       </div>
     </div>
     <div class="card" style="margin-bottom:0">
-      <div class="ctitle">직종별 홍보 현황</div><div class="csub">홍보 주체 유형 분류 (전체 기간)</div>
-      <div class="cwrap" style="height:200px"><canvas id="c-role" role="img" aria-label="직종별 홍보 건수 도넛 차트">의사/교수 75%, 병원 기관 15%, 비의사 직종 10%</canvas></div>
+      <div class="ctitle">홍보 주체 유형</div><div class="csub" id="role-sub">-</div>
+      <div class="cwrap" style="height:200px"><canvas id="c-role" role="img" aria-label="홍보 주체 유형 도넛 차트"></canvas></div>
       <div style="margin-top:10px">
-        <div class="aitem" style="padding:8px 0"><span class="badge bi">TIP</span><div class="atxt">약사·간호사·임상유전상담사 등 비의사 직종 홍보 비중 약 10% — 다양성 확대 여지 있음</div></div>
+        <div class="aitem" style="padding:8px 0"><span class="badge bi">기준</span><div class="atxt" id="role-note">-</div></div>
       </div>
     </div>
   </div>
@@ -553,7 +553,8 @@ async function fetchSheetWithRetry(tries) {
     } catch (e) {
       last = e;
     }
-    if (i < tries - 1) await new Promise(r => setTimeout(r, 700 * (i + 1)));
+    // 404가 몇 초씩 연달아 나는 일이 있어 점점 길게 기다립니다 (0.8 / 1.6 / 3.2 / 6.4초)
+    if (i < tries - 1) await new Promise(r => setTimeout(r, 800 * Math.pow(2, i)));
   }
   throw last;
 }
@@ -561,7 +562,7 @@ async function fetchSheetWithRetry(tries) {
 async function loadGoogleSheetsData() {
   try {
     // Apps Script 엔드포인트가 간헐적으로 404(HTML 오류 페이지)를 돌려주므로 재시도
-    const data = await fetchSheetWithRetry(3);
+    const data = await fetchSheetWithRetry(5);
     const raw = data.map(row => [
       row.year,
       row.month,
@@ -889,6 +890,7 @@ function drawDept(){
   const depts = sortedDepts.map(d=>d[0]);
   const vals = sortedDepts.map(d=>d[1]);
 
+  destroyChart('c-dept');
   new Chart(document.getElementById('c-dept'),{type:'bar',data:{labels:depts,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=30?'#1a3a6b':v>=15?'#2d6a4f':'#b5601a'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
   // 교수별 집계 (선택된 연도)
@@ -897,9 +899,23 @@ function drawDept(){
   const sortedProfs = Object.entries(profCount).sort((a,b)=>b[1]-a[1]).slice(0,25);
   const profNames = sortedProfs.map(p=>p[0]);
   const profVals = sortedProfs.map(p=>p[1]);
+  destroyChart('c-prof-all');
   new Chart(document.getElementById('c-prof-all'),{type:'bar',data:{labels:profNames,datasets:[{data:profVals,backgroundColor:profVals.map(v=>v>=30?'#7a2845':v>=20?'#1a3a6b':'#888780'),borderRadius:3,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:gr},ticks:{color:tx}},y:{grid:{display:false},ticks:{color:tx,font:{size:11}}}}}});
 
-  new Chart(document.getElementById('c-role'),{type:'doughnut',data:{labels:['의사/교수 (75%)','병원 기관 (15%)','비의사 직종 (10%)'],datasets:[{data:[75,15,10],backgroundColor:['#2d6a4f','#1a3a6b','#b5601a'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12}}}}});
+  // 홍보 주체: 시트에 '직종' 열이 없으므로 의료진 칸이 채워졌는지로 나눕니다.
+  let byDoctor=0, byOrg=0;
+  filteredData.forEach(r=>{ String(r[7]||'').trim() ? byDoctor++ : byOrg++; });
+  const roleTotal=byDoctor+byOrg;
+  const rolePct=n=>roleTotal?Math.round(n/roleTotal*100):0;
+  document.getElementById('role-sub').textContent=
+    (deptYr==='전체'?'전체 기간':deptYr+'년')+' · 의료진 칸 기준 '+roleTotal+'건';
+  document.getElementById('role-note').textContent=
+    '의료진 이름이 적힌 건을 개인 홍보, 빈 건을 기관·유닛 단위로 봅니다. '+
+    '시트에 직종 열이 없어 약사·간호사 등은 구분되지 않고, 의료진 칸이 비어 있어도 입력 누락일 수 있습니다.';
+  document.getElementById('c-role').setAttribute('aria-label',
+    '홍보 주체 유형 도넛 차트: 의료진 개인 '+rolePct(byDoctor)+'%, 기관·유닛 단위 '+rolePct(byOrg)+'%');
+  destroyChart('c-role');
+  new Chart(document.getElementById('c-role'),{type:'doughnut',data:{labels:['의료진 개인','기관·유닛 단위'],datasets:[{data:[byDoctor,byOrg],backgroundColor:['#2d6a4f','#1a3a6b'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx,font:{size:11},padding:12}},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'건 ('+rolePct(c.parsed)+'%)'}}}}});
 }
 
 /* ── 담당자 ── */
@@ -1166,6 +1182,7 @@ function drawTerms(){
     cl.appendChild(s);
   });
 
+  destroyChart('c-cluster');
   new Chart(document.getElementById('c-cluster'),{type:'doughnut',data:{labels:['암·종양','심장·혈관','소화기','이식·외과','AI·기술','글로벌·사회공헌','신경·정신','기타'],datasets:[{data:[200,180,140,130,95,110,85,173],backgroundColor:['#8b2020','#7a2845','#2d6a4f','#1a3a6b','#5b4a8a','#b5601a','#1a7a6a','#888780'],borderWidth:3,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tx,font:{size:11},padding:8,boxWidth:12}}}}});
 }
 </script>
