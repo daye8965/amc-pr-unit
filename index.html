@@ -229,6 +229,12 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
   </div>
 </div>
 
+<!-- 캐시로 먼저 그렸을 때 -->
+<div id="cache-notice" style="display:none;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1.25rem;margin-bottom:1.5rem;font-size:12px;color:var(--text2)">
+  <div class="load-spinner" id="cache-spinner" style="width:16px;height:16px;border-width:2px"></div>
+  <div><strong id="cache-notice-text">-</strong></div>
+</div>
+
 <!-- 시트를 못 받았을 때 (경고창 대신 화면에 남겨 원인을 보여줍니다) -->
 <div id="load-error" style="display:none;background:#fff4ed;border:1px solid #f0c9a8;border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem">
   <div style="font-size:14px;font-weight:700;color:#8a4b1a;margin-bottom:6px">실적 데이터를 불러오지 못했습니다</div>
@@ -629,11 +635,71 @@ function showLoading(on) {
   }, 1000);
 }
 
+/* ── 직전 데이터 캐시 ──
+   시트 fetch 가 5초쯤 걸려서, 재방문 때는 캐시로 먼저 그려놓고 뒤에서 갱신합니다.
+   브라우저마다 따로 저장되고 사생활 모드나 저장 차단 환경에서는 그냥 없는 셈이 되므로
+   읽기·쓰기를 모두 try 로 감쌉니다. */
+const CACHE_KEY = 'amc-pr-unit:data:v1';
+const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;   // 너무 오래된 숫자를 보여주지 않도록
+
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    if (!c || !Array.isArray(c.rows) || !c.rows.length) return null;
+    if (Date.now() - c.t > CACHE_MAX_AGE) return null;
+    return c;
+  } catch (e) { return null; }
+}
+
+function writeCache(rows) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), rows: rows }));
+  } catch (e) {
+    console.warn('캐시 저장 실패(용량 초과 등). 동작에는 지장 없습니다.', e);
+  }
+}
+
+function showCacheNotice(ts, state) {
+  const box = document.getElementById('cache-notice');
+  if (!box) return;
+  if (!state) { box.style.display = 'none'; return; }
+  const d = new Date(ts);
+  const when = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' +
+    String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  document.getElementById('cache-spinner').style.display = state === 'checking' ? 'block' : 'none';
+  document.getElementById('cache-notice-text').textContent = state === 'checking'
+    ? when + '에 받아둔 데이터입니다 · 최신 데이터 확인 중'
+    : when + '에 받아둔 데이터입니다 · 최신 데이터를 받지 못했습니다';
+  box.style.display = 'flex';
+}
+
+/** 보던 탭을 유지한 채 다시 그립니다 (initDashboard 는 전체 현황으로 돌아갑니다) */
+function redrawCurrentTab() {
+  const cur = getCurrentTab();
+  Object.keys(drawn).forEach(k => delete drawn[k]);
+  show(cur);
+}
+
 async function loadGoogleSheetsData() {
   const btn = document.getElementById('load-retry');
   if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
   showLoadError(null);
-  showLoading(true);
+
+  // 캐시가 있으면 그걸로 먼저 그리고, 시트는 뒤에서 받습니다
+  let fromCache = null;
+  if (!ALL_DATA.length) {
+    fromCache = readCache();
+    if (fromCache) {
+      ALL_DATA = fromCache.rows;
+      console.log('캐시로 먼저 그림:', ALL_DATA.length, '건');
+      initDashboard();
+      showCacheNotice(fromCache.t, 'checking');
+    }
+  }
+  showLoading(!fromCache);
+
   try {
     // Apps Script 엔드포인트가 간헐적으로 404(HTML 오류 페이지)를 돌려주므로 재시도
     const data = await fetchSheetWithRetry(5);
@@ -659,12 +725,16 @@ async function loadGoogleSheetsData() {
       return true;
     });
     console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건, 헤더행 제외 후:', body.length, '건)');
-    // 데이터 로드 후 필요한 초기화
-    initDashboard();
+    writeCache(ALL_DATA);
+    // 캐시로 이미 그렸으면 보던 탭을 유지한 채 최신 데이터로 다시 그립니다
+    if (fromCache) redrawCurrentTab(); else initDashboard();
+    showCacheNotice(0, null);
     showLoadError(null);
   } catch (error) {
     console.error('Google Sheets 데이터 로드 실패:', error);
-    showLoadError(error);
+    // 캐시로 그려둔 게 있으면 화면을 지우지 않고 '갱신 실패'만 알립니다
+    if (fromCache) showCacheNotice(fromCache.t, 'stale');
+    else showLoadError(error);
   } finally {
     showLoading(false);
     if (btn) { btn.disabled = false; btn.textContent = '다시 시도'; }
