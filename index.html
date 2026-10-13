@@ -353,25 +353,17 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 <!-- ④ 진료과 분석 -->
 <section class="sec" id="sec-dept">
   <!-- 연도 필터 -->
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem" id="dept-yr-filter-btns">
-    <button class="ybtn active" onclick="setDeptYrFilter('전체')">전체</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2021')">2021</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2022')">2022</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2023')">2023</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2024')">2024</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2025')">2025</button>
-    <button class="ybtn" onclick="setDeptYrFilter('2026')">2026</button>
-  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem" id="dept-yr-filter-btns"></div>
 
   <div class="g2">
     <div class="card" style="margin-bottom:0">
       <div class="ctitle">진료과별 홍보 건수 TOP30</div>
-      <div class="csub">🟦 30건 이상 · 🟩 15~29건 · 🟧 14건 이하</div>
+      <div class="csub"><strong id="dept-period">-</strong> · 🟦 30건 이상 · 🟩 15~29건 · 🟧 14건 이하</div>
       <div class="cwrap" style="height:580px"><canvas id="c-dept" role="img" aria-label="진료과별 홍보 건수 수평 막대 차트"></canvas></div>
     </div>
     <div class="card" style="margin-bottom:0">
-      <div class="ctitle">교수별 홍보 건수 TOP25 (2021~2026)</div>
-      <div class="csub">전체 기간 기준 — 가장 많이 홍보된 의료진</div>
+      <div class="ctitle">교수별 홍보 건수 TOP25</div>
+      <div class="csub"><strong id="prof-period">-</strong> · 가장 많이 홍보된 의료진</div>
       <div class="cwrap" style="height:580px"><canvas id="c-prof-all" role="img" aria-label="교수별 전체 홍보 건수 수평 막대 차트"></canvas></div>
     </div>
   </div>
@@ -961,6 +953,18 @@ function setDeptYrFilter(yr){
 
 /* ── 진료과 ── */
 function drawDept(){
+  if(deptYr===null) deptYr=defaultDeptYr();
+
+  const btns=document.getElementById('dept-yr-filter-btns');
+  if(!btns.children.length){
+    btns.innerHTML=['전체'].concat(dataYears()).map(y=>
+      '<button class="ybtn'+(y===deptYr?' active':'')+'" onclick="setDeptYrFilter(\''+y+'\')">'+y+'</button>').join('');
+  }
+
+  const periodLabel = deptYr==='전체' ? '전체 기간' : deptYr+'년';
+  document.getElementById('dept-period').textContent=periodLabel;
+  document.getElementById('prof-period').textContent=periodLabel;
+
   // 연도 필터 적용
   const filteredData = deptYr==='전체' ? ALL_DATA : ALL_DATA.filter(r=>String(r[0])===deptYr);
 
@@ -1170,7 +1174,8 @@ function wlAgg(){
   return {types,staffs,people,typeTotal,staffTotal,cross,total:rows.length,assign,personAssign};
 }
 
-function wlYears(){
+/** 시트에 실제로 있는 연도. 없는 연도 버튼을 눌러 빈 화면이 되는 일을 막습니다. */
+function dataYears(){
   return [...new Set(ALL_DATA.map(r=>String(r[0])))].filter(y=>/^\d{4}$/.test(y)).sort();
 }
 
@@ -1200,7 +1205,7 @@ function drawWorkload(){
   // 연도 버튼은 시트에 실제로 있는 연도로 생성 (없는 연도 버튼을 눌러 빈 화면이 되는 일 방지)
   const btns=document.getElementById('wl-yr-btns');
   if(!btns.children.length){
-    btns.innerHTML=['전체'].concat(wlYears()).map(y=>
+    btns.innerHTML=['전체'].concat(dataYears()).map(y=>
       '<button class="wbtn'+(y===wlYr?' active':'')+'" onclick="setWlYr(\''+y+'\')">'+y+'</button>').join('');
   }
 
@@ -1285,13 +1290,22 @@ function drawWorkload(){
 let curStaff = '전체';
 let curYr = '전체';
 let curType = '전체';
-let deptYr = '전체';
+let deptYr = null;   // 첫 렌더에서 defaultDeptYr() 로 채웁니다
+
+/** 진료과 탭은 올해를 먼저 보여줍니다. 올해 데이터가 없으면 가장 최근 연도. */
+function defaultDeptYr(){
+  const ys=dataYears();
+  if(!ys.length) return '전체';
+  const now=String(new Date().getFullYear());
+  return ys.indexOf(now)>=0 ? now : ys[ys.length-1];
+}
 
 const TYPE_COLOR = {'취재지원':'취재지원','보도자료':'보도자료','방송':'방송','칼럼':'칼럼','특집기사':'특집기사','해외홍보':'해외홍보','도움말자료':'도움말자료','기타':'기타','SNS':'기타','캠페인':'기타','포스터':'기타','디자인':'기타','위기대응':'기타'};
 
 function setYrFilter(yr){
   curYr=yr;
-  document.querySelectorAll('.ybtn').forEach(b=>b.classList.toggle('active',b.textContent===yr));
+  // 범위를 안 주면 진료과 탭의 .ybtn 까지 같이 켜져 실제 deptYr 과 표시가 어긋납니다
+  document.querySelectorAll('#yr-filter-btns .ybtn').forEach(b=>b.classList.toggle('active',b.textContent===yr));
   renderTable();
 }
 
