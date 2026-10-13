@@ -111,6 +111,8 @@ body{font-family:'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color
 .pdf-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .pdf-overlay.show{display:flex}
 .pdf-spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+/* 시트 fetch 가 5초 가까이 걸려서 그동안 비어 보이지 않게 */
+.load-spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;flex:0 0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .pdf-msg{color:#fff;font-size:15px;font-weight:500;font-family:'Noto Sans KR',sans-serif}
 
@@ -217,6 +219,15 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 </nav>
 
 <main class="main">
+
+<!-- 불러오는 동안 (시트 fetch 가 보통 3~5초 걸립니다) -->
+<div id="load-status" style="display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+  <div class="load-spinner"></div>
+  <div>
+    <div style="font-size:14px;font-weight:600">실적 데이터를 불러오는 중입니다</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:3px" id="load-status-sub">Google 시트에서 받아오는 중 · 보통 3~5초 걸립니다</div>
+  </div>
+</div>
 
 <!-- 시트를 못 받았을 때 (경고창 대신 화면에 남겨 원인을 보여줍니다) -->
 <div id="load-error" style="display:none;background:#fff4ed;border:1px solid #f0c9a8;border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem">
@@ -600,9 +611,29 @@ async function fetchSheetWithRetry(tries) {
   throw last;
 }
 
+let loadTicker = null;
+
+function showLoading(on) {
+  const box = document.getElementById('load-status');
+  if (!box) return;
+  box.style.display = on ? 'flex' : 'none';
+  clearInterval(loadTicker);
+  if (!on) return;
+  // 오래 걸릴 때 멈춘 게 아니라는 걸 알려줍니다
+  const t0 = Date.now();
+  loadTicker = setInterval(() => {
+    const sec = Math.round((Date.now() - t0) / 1000);
+    if (sec < 6) return;
+    const sub = document.getElementById('load-status-sub');
+    if (sub) sub.textContent = sec + '초째 기다리는 중 · 시트가 느리거나 일시적으로 막혀 있을 수 있습니다';
+  }, 1000);
+}
+
 async function loadGoogleSheetsData() {
   const btn = document.getElementById('load-retry');
   if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
+  showLoadError(null);
+  showLoading(true);
   try {
     // Apps Script 엔드포인트가 간헐적으로 404(HTML 오류 페이지)를 돌려주므로 재시도
     const data = await fetchSheetWithRetry(5);
@@ -635,6 +666,7 @@ async function loadGoogleSheetsData() {
     console.error('Google Sheets 데이터 로드 실패:', error);
     showLoadError(error);
   } finally {
+    showLoading(false);
     if (btn) { btn.disabled = false; btn.textContent = '다시 시도'; }
   }
 }
