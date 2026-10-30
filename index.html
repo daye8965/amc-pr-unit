@@ -131,6 +131,8 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 .tl-grid{position:absolute;top:0;bottom:0;width:1px;background:var(--border)}
 .tl-yr{position:absolute;top:0;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:.04em}
 .tl-bar{position:absolute;top:3px;height:16px;border-radius:3px;display:flex;align-items:center;padding:0 5px;font-size:10px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden}
+.tl-mark{position:absolute;top:2px;height:18px;width:3px;border-radius:2px}
+.tl-mlabel{position:absolute;top:5px;font-size:10px;font-weight:600;white-space:nowrap}
 .tl-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--text2)}
 .tl-chip{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 
@@ -1152,7 +1154,8 @@ const STAFF_EVENTS=[
   {staff:'민경준', kind:'이동',     label:'병원보유닛 이동', from:[2025,1], to:null},
   {staff:'윤주은', kind:'대체인력', label:'대체인력',        from:[2025,3], to:[2026,8]},
   {staff:'문지애', kind:'파견',     label:'파견',            from:[2022,1], to:[2024,12]},
-  {staff:'신윤호', kind:'이동',     label:'부서이동',        from:[2022,1], to:null}
+  // 부서를 옮겨 나간 시점만 찍습니다. 이후 기간은 우리 기록이 아니라 막대를 그리지 않습니다.
+  {staff:'신윤호', kind:'이동',     label:'부서이동',        from:[2022,1], point:true}
 ];
 
 const TL_MONTHS=(TL_TO_YEAR-TL_FROM_YEAR+1)*12;
@@ -1161,13 +1164,15 @@ function tlPct(i){return i/TL_MONTHS*100;}
 function tlEndIdx(e){return e.to?tlIdx(e.to):TL_MONTHS-1;}   // 열린 기간은 범위 끝까지
 function tlPeriod(e){
   const a=e.from;
+  if(e.point) return a[0]+'년 '+a[1]+'월';
   if(!e.to) return a[0]+'년 '+a[1]+'월 ~ 계속';
   const b=e.to;
   return a[0]+'년 '+a[1]+'월 ~ '+(b[0]===a[0]?b[1]+'월':b[0]+'년 '+b[1]+'월');
 }
 /** 해당 연도에 걸치는 이력 */
 function tlEventsInYear(y){
-  return STAFF_EVENTS.filter(e=>e.from[0]<=y && (e.to?e.to[0]:TL_TO_YEAR)>=y);
+  return STAFF_EVENTS.filter(e=>
+    e.point ? e.from[0]===y : (e.from[0]<=y && (e.to?e.to[0]:TL_TO_YEAR)>=y));
 }
 
 function renderStaffEvents(){
@@ -1192,7 +1197,13 @@ function renderStaffEvents(){
     }
     STAFF_EVENTS.filter(e=>e.staff===name).forEach(e=>{
       const c=TL_KINDS[e.kind].color;
-      const l=tlPct(tlIdx(e.from)), w=tlPct(tlEndIdx(e)-tlIdx(e.from)+1);
+      const l=tlPct(tlIdx(e.from));
+      if(e.point){
+        track+='<div class="tl-mark" title="'+e.label+' ('+tlPeriod(e)+')" style="left:'+l+'%;background:'+c+'"></div>'+
+               '<div class="tl-mlabel" style="left:calc('+l+'% + 7px);color:'+c+'">'+e.label+'</div>';
+        return;
+      }
+      const w=tlPct(tlEndIdx(e)-tlIdx(e.from)+1);
       track+='<div class="tl-bar" title="'+e.label+' ('+tlPeriod(e)+')" style="left:'+l+'%;width:'+w+'%;background:'+c+'">'+
              (w>13?e.label+(e.to?'':' →'):'')+'</div>';
     });
@@ -1204,7 +1215,8 @@ function renderStaffEvents(){
   const usedKinds=Object.keys(TL_KINDS).filter(k=>STAFF_EVENTS.some(e=>e.kind===k));
   document.getElementById('tl-legend').innerHTML=usedKinds.map(k=>
     '<span><span class="tl-chip" style="background:'+TL_KINDS[k].color+'"></span>'+k+'</span>').join('')+
-    '<span style="color:var(--text3)">막대 = 해당 기간, → = 계속</span>';
+    '<span style="color:var(--text3)">막대 = 해당 기간, → = 계속'+
+    (STAFF_EVENTS.some(e=>e.point)?', 세로선 = 그 시점':'')+'</span>';
 
   // PDF에서 막대만으로는 안 읽히므로 표도 같이 둡니다
   const th='padding:7px 10px;text-align:left;color:var(--text3);font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap';
