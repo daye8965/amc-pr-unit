@@ -1145,16 +1145,17 @@ const TL_KINDS={
   '합류':    {color:'#2d6a4f'},
   '이동':    {color:'#8b2020'}
 };
+// point:true 는 '그 시점'만 찍습니다. 유닛을 떠난 이동은 이후 기간이 우리 기록이 아니라
+// 막대를 그리지 않습니다(신윤호 2022.1, 민경준 2025.1).
 const STAFF_EVENTS=[
   {staff:'이다예', kind:'휴직',     label:'육아휴직',        from:[2021,3], to:[2022,5]},
   {staff:'이다예', kind:'이동',     label:'SNS제작',         from:[2023,1], to:[2023,12]},
   {staff:'이다예', kind:'휴직',     label:'육아휴직',        from:[2025,2], to:[2026,5]},
   {staff:'박준규', kind:'합류',     label:'언론유닛 합류',   from:[2025,1], to:null},
   {staff:'김준호', kind:'합류',     label:'언론유닛 합류',   from:[2023,1], to:[2023,12]},
-  {staff:'민경준', kind:'이동',     label:'병원보유닛 이동', from:[2025,1], to:null},
+  {staff:'민경준', kind:'이동',     label:'병원보유닛 이동', from:[2025,1], point:true},
   {staff:'윤주은', kind:'대체인력', label:'대체인력',        from:[2025,3], to:[2026,8]},
   {staff:'문지애', kind:'파견',     label:'파견',            from:[2022,1], to:[2024,12]},
-  // 부서를 옮겨 나간 시점만 찍습니다. 이후 기간은 우리 기록이 아니라 막대를 그리지 않습니다.
   {staff:'신윤호', kind:'이동',     label:'부서이동',        from:[2022,1], point:true}
 ];
 
