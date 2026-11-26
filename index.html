@@ -19,13 +19,17 @@
 }
 body{font-family:'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;font-weight:500}
 
-.header{background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%);color:#fff;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.header h1{font-size:24px;font-weight:700;letter-spacing:-0.03em;margin:0}
-.header p{font-size:13px;opacity:.75;margin-top:4px;font-weight:400}
-.header-right{display:flex;align-items:center;gap:10px}
-.hbadge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 14px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.05em}
-.pdf-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
-.pdf-btn:hover{background:rgba(255,255,255,.28)}
+/* 밝은 머리글: 다른 페이지 안에 끼워 넣어도 띠가 튀지 않게 */
+.header{background:var(--surface);color:var(--text);padding:1.5rem 2.5rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.header h1{font-size:21px;font-weight:700;letter-spacing:-0.03em;margin:0}
+.htitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.header p{font-size:13px;color:var(--text2);margin-top:7px;font-weight:400}
+.hmeta{font-size:12px;color:var(--text3);margin-top:3px;font-weight:400}
+.header-right{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.hbadge{display:inline-flex;align-items:center;gap:6px;background:#e8f5ee;border:1px solid #bfe3d2;color:#0f6e56;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:.03em;white-space:nowrap}
+.hbadge::before{content:'';width:6px;height:6px;border-radius:50%;background:#0f6e56;flex:0 0 auto}
+.pdf-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s;white-space:nowrap}
+.pdf-btn:hover{background:#eef2f6;border-color:var(--text3);color:var(--text)}
 .pdf-btn:active{transform:scale(0.97)}
 
 .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;overflow-x:auto;box-shadow:0 1px 2px rgba(0,0,0,0.02)}
@@ -176,11 +180,15 @@ footer{text-align:center;padding:1.5rem;font-size:11px;color:var(--text3);border
 
 <header class="header">
   <div>
-    <h1>언론유닛 홍보 실적 대시보드</h1>
-    <p>서울아산병원 홍보팀 · 2021–2026 전체 데이터 기준 · 대시보드 제작: 이다예</p>
+    <div class="htitle">
+      <h1>언론유닛 홍보 실적 대시보드</h1>
+      <span class="hbadge">2021–2026</span>
+    </div>
+    <p>서울아산병원 홍보팀 보도자료 · 언론보도 실적 분석</p>
+    <div class="hmeta">대시보드 제작 : 이다예</div>
+    <div class="hmeta">마지막 갱신 : <span id="hdr-updated">불러오는 중…</span></div>
   </div>
   <div class="header-right">
-    <div class="hbadge">2021–2026</div>
     <button class="pdf-btn" onclick="openPdfModal()">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       PDF 저장
@@ -692,6 +700,16 @@ function writeCache(rows) {
   }
 }
 
+/** 머리글의 '마지막 갱신'. 캐시로 그렸으면 그 시각, 새로 받았으면 지금. */
+function setUpdatedAt(ts, fromCache) {
+  const el = document.getElementById('hdr-updated');
+  if (!el) return;
+  const d = new Date(ts);
+  const p = n => String(n).padStart(2, '0');
+  el.textContent = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+    ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + (fromCache ? ' (직전 저장분)' : '');
+}
+
 function showCacheNotice(ts, state) {
   const box = document.getElementById('cache-notice');
   if (!box) return;
@@ -726,6 +744,7 @@ async function loadGoogleSheetsData() {
       ALL_DATA = fromCache.rows;
       console.log('캐시로 먼저 그림:', ALL_DATA.length, '건');
       initDashboard();
+      setUpdatedAt(fromCache.t, true);
       showCacheNotice(fromCache.t, 'checking');
     }
   }
@@ -757,6 +776,7 @@ async function loadGoogleSheetsData() {
     });
     console.log('데이터 로드 완료:', ALL_DATA.length, '건 (원본:', raw.length, '건, 헤더행 제외 후:', body.length, '건)');
     writeCache(ALL_DATA);
+    setUpdatedAt(Date.now(), false);
     // 캐시로 이미 그렸으면 보던 탭을 유지한 채 최신 데이터로 다시 그립니다
     if (fromCache) redrawCurrentTab(); else initDashboard();
     showCacheNotice(0, null);
@@ -765,7 +785,7 @@ async function loadGoogleSheetsData() {
     console.error('Google Sheets 데이터 로드 실패:', error);
     // 캐시로 그려둔 게 있으면 화면을 지우지 않고 '갱신 실패'만 알립니다
     if (fromCache) showCacheNotice(fromCache.t, 'stale');
-    else showLoadError(error);
+    else { showLoadError(error); document.getElementById('hdr-updated').textContent = '불러오지 못함'; }
   } finally {
     showLoading(false);
     if (btn) { btn.disabled = false; btn.textContent = '다시 시도'; }
